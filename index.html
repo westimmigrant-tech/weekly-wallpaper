@@ -6,553 +6,669 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>周·壁·纸</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;700&family=ZCOOL+XiaoWei&family=Ma+Shan+Zheng&family=Liu+Jian+Mao+Cao&display=swap" rel="stylesheet">
 <style>
+  :root {
+    --bg: #07080b;
+    --panel: rgba(255,255,255,.055);
+    --line: rgba(255,255,255,.12);
+    --text: rgba(255,255,255,.88);
+    --muted: rgba(255,255,255,.48);
+    --dim: rgba(255,255,255,.26);
+    --accent: #c9a84c;
+    --accent-soft: rgba(201,168,76,.14);
+    --shadow: 0 24px 80px rgba(0,0,0,.42);
+  }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root { --accent: #c9a84c; --accent2: rgba(201,168,76,0.15); }
+  html, body { min-height: 100%; }
   body {
-    background: #0a0a0a; color: #ddd;
-    font-family: 'Noto Serif SC', 'PingFang SC', serif;
-    min-height: 100vh; display: flex; flex-direction: column; align-items: center;
-    padding: 32px 16px 48px; -webkit-font-smoothing: antialiased;
+    background:
+      radial-gradient(circle at 18% 0%, var(--accent-soft), transparent 30rem),
+      radial-gradient(circle at 88% 22%, rgba(100,120,180,.10), transparent 32rem),
+      var(--bg);
+    color: var(--text);
+    font-family: ui-serif, "Songti SC", "Noto Serif SC", "Source Han Serif SC", "STSong", serif;
+    -webkit-font-smoothing: antialiased;
+    display: flex; justify-content: center;
+    padding: 28px 16px 56px;
   }
-  .header { text-align: center; margin-bottom: 36px; }
-  .header h1 { font-size: 22px; font-weight: 300; letter-spacing: 8px; color: #888; }
-  .header p { color: #444; font-size: 13px; margin-top: 8px; letter-spacing: 3px; }
+  button, input, textarea, select { font: inherit; }
 
-  .themes { display: flex; gap: 8px; margin-bottom: 36px; flex-wrap: wrap; justify-content: center; }
-  .themes button {
-    padding: 7px 20px; border-radius: 3px; border: 1px solid #222;
-    background: transparent; color: #666; cursor: pointer; font-size: 13px;
-    letter-spacing: 2px; font-family: inherit; transition: all 0.25s;
+  .app {
+    width: min(1140px, 100%);
+    display: grid;
+    grid-template-columns: minmax(320px, 470px) minmax(320px, 1fr);
+    gap: 24px; align-items: start;
   }
-  .themes button.active { border-color: var(--accent); background: var(--accent2); color: var(--accent); }
 
-  .section { width: 100%; max-width: 440px; margin-bottom: 22px; }
-  .section-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
-  .section-head .title { font-size: 15px; color: #ccc; font-weight: 600; letter-spacing: 2px; }
-  .section-head .hint { font-size: 12px; color: #555; }
+  .studio, .previewCard {
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+    box-shadow: var(--shadow);
+    border-radius: 28px;
+    backdrop-filter: blur(20px);
+  }
+  .studio { padding: 26px; }
 
-  .input-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; }
-  .input-row input {
-    flex: 1; padding: 11px 16px; border-radius: 6px; border: 1px solid #262626;
-    background: #141414; color: #ddd; font-size: 15px; font-family: inherit;
-    outline: none; transition: border-color 0.2s;
+  .brand { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 22px; }
+  .brand h1 { font-size: 23px; line-height: 1.2; font-weight: 520; letter-spacing: .16em; }
+  .brand p { margin-top: 7px; color: var(--muted); font-size: 13px; letter-spacing: .06em; }
+  .weekPill {
+    flex: none; padding: 8px 12px; border-radius: 999px;
+    border: 1px solid var(--line); color: var(--accent); background: var(--accent-soft);
+    font: 600 12px/1 ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    letter-spacing: .1em;
   }
-  .input-row input:focus { border-color: var(--accent); }
-  .remove { background: none; border: none; color: #444; cursor: pointer; font-size: 16px; padding: 4px 6px; }
-  .add-btn {
-    background: none; border: 1px dashed #2a2a2a; color: #555; border-radius: 6px;
-    padding: 9px; width: 100%; cursor: pointer; font-size: 13px; font-family: inherit;
-    transition: border-color 0.2s;
-  }
-  .add-btn:hover { border-color: #444; }
 
-  .motto-input {
-    width: 100%; padding: 11px 16px; border-radius: 6px; border: 1px solid #262626;
-    background: #141414; color: #ddd; font-size: 15px; font-family: inherit;
-    outline: none; box-sizing: border-box; transition: border-color 0.2s;
+  .themeGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin-bottom: 20px; }
+  .themeBtn {
+    min-height: 52px; cursor: pointer; border-radius: 14px; border: 1px solid var(--line);
+    background: var(--panel); color: var(--muted); display: grid; place-items: center; gap: 4px;
+    transition: transform .18s, border-color .18s, background .18s, color .18s;
   }
-  .motto-input:focus { border-color: var(--accent); }
+  .themeBtn:hover { transform: translateY(-1px); border-color: rgba(255,255,255,.26); }
+  .themeBtn.active { color: var(--text); border-color: var(--accent); background: var(--accent-soft); }
+  .dot { width: 16px; height: 16px; border-radius: 999px; border: 1px solid rgba(255,255,255,.22); }
+  .themeBtn span:last-child { font-size: 11px; letter-spacing: .08em; }
 
-  .bird-section { width: 100%; max-width: 440px; margin-bottom: 28px; }
-  .bird-row { display: flex; gap: 10px; align-items: center; }
-  .bird-preview {
-    width: 72px; height: 72px; border-radius: 8px; background: #1a1a1a;
-    overflow: hidden; flex-shrink: 0; position: relative;
-  }
-  .bird-preview img { width: 100%; height: 100%; object-fit: cover; }
-  .bird-preview .placeholder { color: #444; font-size: 11px; display: flex; align-items: center; justify-content: center; height: 100%; }
-  .bird-info { flex: 1; }
-  .bird-info .photo-desc { font-size: 13px; color: #999; margin-bottom: 6px; line-height: 1.4; }
-  .bird-info .photo-credit { font-size: 11px; color: #555; }
-  .bird-refresh {
-    padding: 8px 20px; border-radius: 3px; border: 1px solid #333;
-    background: transparent; color: #888; font-size: 12px; cursor: pointer;
-    font-family: inherit; letter-spacing: 1px; transition: all 0.2s; flex-shrink: 0;
-  }
-  .bird-refresh:hover { border-color: var(--accent); color: var(--accent); }
-  .bird-refresh:disabled { opacity: 0.4; cursor: default; }
+  .fieldGroup { border-top: 1px solid var(--line); padding-top: 16px; margin-top: 16px; }
+  .fieldHead { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; margin-bottom: 9px; }
+  .fieldHead strong { font-size: 14px; font-weight: 650; letter-spacing: .1em; }
+  .fieldHead span { color: var(--dim); font-size: 12px; }
 
-  .search-row { display: flex; gap: 8px; margin-bottom: 12px; }
-  .search-input {
-    flex: 1; padding: 9px 14px; border-radius: 6px; border: 1px solid #262626;
-    background: #141414; color: #ddd; font-size: 13px; font-family: inherit; outline: none;
-    transition: border-color 0.2s;
+  input, textarea {
+    width: 100%; border: 1px solid rgba(255,255,255,.10); border-radius: 14px;
+    background: rgba(0,0,0,.22); color: var(--text); outline: none; padding: 12px 14px;
+    transition: border-color .18s, background .18s;
   }
-  .search-input:focus { border-color: var(--accent); }
-  .search-btn {
-    padding: 9px 16px; border-radius: 6px; border: 1px solid #333;
-    background: transparent; color: #888; font-size: 12px; cursor: pointer;
-    font-family: inherit; transition: all 0.2s;
-  }
-  .search-btn:hover { border-color: var(--accent); color: var(--accent); }
+  textarea { min-height: 88px; resize: vertical; line-height: 1.6; }
+  input::placeholder, textarea::placeholder { color: rgba(255,255,255,.26); }
+  input:focus, textarea:focus { border-color: var(--accent); background: rgba(0,0,0,.28); }
 
-  .btn-row { display: flex; gap: 12px; margin-bottom: 40px; flex-wrap: wrap; justify-content: center; }
-  .gen-btn {
-    padding: 13px 56px; border-radius: 3px; border: 1px solid var(--accent);
-    background: transparent; color: var(--accent); font-size: 15px;
-    cursor: pointer; font-family: inherit; letter-spacing: 6px; transition: all 0.25s;
-  }
-  .gen-btn:hover { background: var(--accent); color: #0a0a0a; }
-  .gen-btn:disabled { opacity: 0.4; cursor: default; }
+  .list { display: grid; gap: 7px; }
+  .row { display: grid; grid-template-columns: 1fr 34px; gap: 7px; align-items: center; }
 
-  .preview { display: flex; flex-direction: column; align-items: center; gap: 20px; }
-  .preview-frame {
-    padding: 12px; background: #151515; border-radius: 24px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  .removeBtn, .addBtn {
+    cursor: pointer; border: 1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.04); color: var(--muted); border-radius: 12px;
+    transition: border-color .18s, color .18s, background .18s;
   }
-  .preview-frame canvas { width: 270px; height: 584px; border-radius: 16px; display: block; }
-  .save-btn {
-    padding: 11px 44px; border-radius: 3px; border: 1px solid #333;
-    background: transparent; color: #999; font-size: 13px; cursor: pointer;
-    font-family: inherit; letter-spacing: 3px; transition: all 0.2s;
+  .removeBtn { height: 44px; }
+  .addBtn { width: 100%; height: 42px; margin-top: 8px; letter-spacing: .1em; }
+  .removeBtn:hover, .addBtn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+
+  .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 22px; }
+  .primary, .secondary {
+    height: 48px; border-radius: 14px; cursor: pointer; letter-spacing: .14em;
+    transition: transform .18s, filter .18s, border-color .18s;
   }
-  .save-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .size-note { color: #444; font-size: 11px; letter-spacing: 1px; }
-  .hidden { display: none; }
-  .loading-dot { display: inline-block; animation: pulse 1.2s infinite; }
-  @keyframes pulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+  .primary { border: 1px solid var(--accent); color: #111; background: var(--accent); font-weight: 700; }
+  .secondary { border: 1px solid var(--line); color: var(--muted); background: rgba(255,255,255,.04); }
+  .primary:hover, .secondary:hover { transform: translateY(-1px); }
+  .secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  .previewCard {
+    position: sticky; top: 20px; padding: 22px;
+    display: grid; justify-items: center; gap: 14px;
+  }
+  .phoneShell {
+    padding: 12px; border-radius: 34px;
+    background: linear-gradient(180deg, rgba(255,255,255,.11), rgba(255,255,255,.03));
+    border: 1px solid rgba(255,255,255,.12);
+    box-shadow: 0 20px 70px rgba(0,0,0,.48);
+  }
+  canvas {
+    display: block; width: min(320px, 62vw);
+    aspect-ratio: 1170 / 2532; border-radius: 24px; background: #111;
+  }
+  .previewMeta {
+    color: var(--dim);
+    font: 500 12px/1.6 ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    letter-spacing: .06em; text-align: center;
+  }
+  .previewActions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .smallBtn {
+    min-width: 120px; height: 40px; border-radius: 12px; border: 1px solid var(--line);
+    background: rgba(255,255,255,.04); color: var(--muted); cursor: pointer;
+    font-size: 13px; letter-spacing: .1em;
+    transition: border-color .18s, color .18s, background .18s;
+  }
+  .smallBtn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+
+  @media (max-width: 860px) {
+    body { padding-top: 18px; }
+    .app { grid-template-columns: 1fr; }
+    .previewCard { position: static; }
+    .themeGrid { grid-template-columns: repeat(4, 1fr); }
+    canvas { width: min(320px, 82vw); }
+  }
 </style>
 </head>
 <body>
-
-<div class="header">
-  <h1>周 · 壁 · 纸</h1>
-  <p id="weekLabelUI"></p>
-</div>
-
-<div class="themes" id="themeBtns"></div>
-
-<!-- Bird photo section -->
-<div class="bird-section">
-  <div class="section-head">
-    <span class="title">背景图片</span>
-    <span class="hint">来自 Unsplash</span>
-  </div>
-  <div class="search-row">
-    <input class="search-input" id="searchInput" value="bird" placeholder="搜索关键词，如 bird, eagle, owl...">
-    <button class="search-btn" id="searchBtn">搜索</button>
-  </div>
-  <div class="bird-row">
-    <div class="bird-preview" id="birdPreview">
-      <div class="placeholder">加载中</div>
+<main class="app">
+  <section class="studio">
+    <div class="brand">
+      <div>
+        <h1>周 · 壁 · 纸</h1>
+        <p>主目标突出 · 杂志封面式构图</p>
+      </div>
+      <div class="weekPill" id="weekPill">WEEK</div>
     </div>
-    <div class="bird-info">
-      <div class="photo-desc" id="photoDesc">正在获取图片...</div>
-      <div class="photo-credit" id="photoCredit"></div>
+    <div class="themeGrid" id="themeGrid"></div>
+
+    <div class="fieldGroup">
+      <div class="fieldHead"><strong>本周主题</strong><span>一句短句定义这一周</span></div>
+      <input id="themeLine" maxlength="28" placeholder="例如：慢慢推进，但保持锋利">
     </div>
-    <button class="bird-refresh" id="refreshBird">换一张</button>
-  </div>
-</div>
+    <div class="fieldGroup">
+      <div class="fieldHead"><strong>核心目标</strong><span>本周最重要的一件事</span></div>
+      <textarea id="mainGoal" maxlength="72" placeholder="例如：完成第三章的悬疑线设计，让读者感到危险正在收束。"></textarea>
+    </div>
+    <div class="fieldGroup">
+      <div class="fieldHead"><strong>辅助目标</strong><span>最多 5 条</span></div>
+      <div class="list" id="goalList"></div>
+      <button class="addBtn" id="addGoal" type="button">＋ 添加</button>
+    </div>
+    <div class="fieldGroup">
+      <div class="fieldHead"><strong>长期修炼</strong><span>长期习惯 · 弱化呈现</span></div>
+      <div class="list" id="habitList"></div>
+      <button class="addBtn" id="addHabit" type="button">＋ 添加</button>
+    </div>
+    <div class="fieldGroup">
+      <div class="fieldHead"><strong>寄语</strong><span>可选</span></div>
+      <input id="motto" maxlength="32" placeholder="例如：不要等灵感，先坐下来。">
+    </div>
+    <div class="actions">
+      <button class="primary" id="generateBtn" type="button">生 成</button>
+      <button class="secondary" id="resetBtn" type="button">重 置</button>
+    </div>
+  </section>
 
-<div class="section">
-  <div class="section-head">
-    <span class="title">长期修炼</span>
-    <span class="hint">几个月不变的习惯</span>
-  </div>
-  <div id="practiceList"></div>
-  <button class="add-btn" id="addPractice">+</button>
-</div>
-
-<div class="section">
-  <div class="section-head">
-    <span class="title">本周目标</span>
-    <span class="hint">每周更新</span>
-  </div>
-  <div id="goalList"></div>
-  <button class="add-btn" id="addGoal">+</button>
-</div>
-
-<div class="section">
-  <div class="section-head">
-    <span class="title">寄语</span>
-    <span class="hint">可选</span>
-  </div>
-  <input class="motto-input" id="mottoInput" placeholder="一句话，给自己">
-</div>
-
-<div class="btn-row">
-  <button class="gen-btn" id="genBtn">生成</button>
-</div>
-
-<div class="preview hidden" id="previewArea">
-  <div class="preview-frame">
-    <canvas id="canvas"></canvas>
-  </div>
-  <button class="save-btn" id="saveBtn">保存图片</button>
-  <p class="size-note">1170 × 2532 · iPhone 壁纸尺寸</p>
-</div>
+  <aside class="previewCard">
+    <div class="phoneShell">
+      <canvas id="wallpaper" width="1170" height="2532"></canvas>
+    </div>
+    <div class="previewMeta" id="previewMeta">1170 × 2532 · PNG · iPhone 壁纸</div>
+    <div class="previewActions">
+      <button class="smallBtn" id="downloadBtn" type="button">保存图片</button>
+      <button class="smallBtn" id="randomBtn" type="button">随机主题</button>
+    </div>
+  </aside>
+</main>
 
 <script>
-// ============ CONFIG ============
-const UNSPLASH_KEY = "nGoHXOsW-ndSfCUf9cCilNPW0EqJq_0lRPfAZ0wQZes";
-
-const THEMES = [
-  {
-    name: "墨玉",
-    accent: "#c9a84c", accent2: "rgba(201,168,76,0.15)",
-    text: "#f0e8d8", sub: "rgba(240,232,216,0.5)", dim: "rgba(240,232,216,0.22)",
-    watermark: "rgba(240,232,216,0.05)",
-    overlay: "rgba(8,9,12,0.72)",
-    titleFont: "Ma Shan Zheng", bodyFont: "Noto Serif SC",
-  },
-  {
-    name: "青山",
-    accent: "#7cb88a", accent2: "rgba(124,184,138,0.12)",
-    text: "#e0f0e0", sub: "rgba(224,240,224,0.5)", dim: "rgba(224,240,224,0.2)",
-    watermark: "rgba(224,240,224,0.05)",
-    overlay: "rgba(9,15,11,0.72)",
-    titleFont: "ZCOOL XiaoWei", bodyFont: "Noto Serif SC",
-  },
-  {
-    name: "霜白",
-    accent: "#f5f0e6", accent2: "rgba(245,240,230,0.1)",
-    text: "#f5f0e6", sub: "rgba(245,240,230,0.5)", dim: "rgba(245,240,230,0.2)",
-    watermark: "rgba(245,240,230,0.06)",
-    overlay: "rgba(20,18,16,0.75)",
-    titleFont: "Liu Jian Mao Cao", bodyFont: "Noto Serif SC",
-  },
-  {
-    name: "暮云",
-    accent: "#a78bfa", accent2: "rgba(167,139,250,0.1)",
-    text: "#e8e0f4", sub: "rgba(232,224,244,0.45)", dim: "rgba(232,224,244,0.18)",
-    watermark: "rgba(232,224,244,0.05)",
-    overlay: "rgba(12,10,18,0.72)",
-    titleFont: "Ma Shan Zheng", bodyFont: "Noto Serif SC",
-  },
-  {
-    name: "赤金",
-    accent: "#e8814a", accent2: "rgba(232,129,74,0.1)",
-    text: "#f5e8d8", sub: "rgba(245,232,216,0.45)", dim: "rgba(245,232,216,0.18)",
-    watermark: "rgba(245,232,216,0.05)",
-    overlay: "rgba(16,8,10,0.72)",
-    titleFont: "ZCOOL XiaoWei", bodyFont: "Noto Serif SC",
-  },
-];
-
-let currentTheme = 0;
-let practices = ["", ""];
-let goals = ["", "", ""];
-let birdImageUrl = null;
-let birdImageObj = null;
-let birdPhotographer = "";
-let birdDesc = "";
-
-// ============ WEEK ============
-function getISOWeek(d) {
-  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-  const day = date.getUTCDay() || 7;
-  date.setUTCDate(date.getUTCDate() + 4 - day);
-  const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
-  return Math.ceil((((date - yearStart) / 86400000) + 1) / 7);
-}
-function getYear() { return new Date().getFullYear(); }
-function getWeekNum() { return getISOWeek(new Date()); }
-function getWeekLabel() { return `${getYear()} · W${String(getWeekNum()).padStart(2, "0")}`; }
-
-// ============ UNSPLASH ============
-async function fetchBirdPhoto() {
-  const btn = document.getElementById("refreshBird");
-  const searchBtn = document.getElementById("searchBtn");
-  btn.disabled = true;
-  searchBtn.disabled = true;
-  document.getElementById("photoDesc").innerHTML = '<span class="loading-dot">·</span> 正在搜索...';
-  document.getElementById("photoCredit").textContent = "";
-  document.getElementById("birdPreview").innerHTML = '<div class="placeholder">...</div>';
-
-  const query = document.getElementById("searchInput").value.trim() || "bird";
-
-  try {
-    const res = await fetch(
-      `https://api.unsplash.com/photos/random?query=${encodeURIComponent(query)}&orientation=portrait&content_filter=high`,
-      { headers: { Authorization: `Client-ID ${UNSPLASH_KEY}` } }
-    );
-    if (!res.ok) throw new Error(`API error ${res.status}`);
-    const data = await res.json();
-
-    birdImageUrl = data.urls.regular;
-    birdPhotographer = data.user.name || "Unknown";
-    birdDesc = data.alt_description || data.description || query;
-
-    // Load image
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.onload = () => {
-      birdImageObj = img;
-      document.getElementById("birdPreview").innerHTML = "";
-      const preview = document.createElement("img");
-      preview.src = data.urls.thumb;
-      document.getElementById("birdPreview").appendChild(preview);
-      document.getElementById("photoDesc").textContent = birdDesc.length > 50 ? birdDesc.slice(0, 50) + "..." : birdDesc;
-      document.getElementById("photoCredit").textContent = `📷 ${birdPhotographer} / Unsplash`;
-      btn.disabled = false;
-      searchBtn.disabled = false;
-    };
-    img.onerror = () => {
-      document.getElementById("photoDesc").textContent = "图片加载失败，请重试";
-      btn.disabled = false;
-      searchBtn.disabled = false;
-    };
-    img.src = birdImageUrl;
-  } catch (e) {
-    document.getElementById("photoDesc").textContent = "获取失败: " + e.message;
-    btn.disabled = false;
-    searchBtn.disabled = false;
-  }
-}
-
-// ============ UI ============
-function renderThemeButtons() {
-  const el = document.getElementById("themeBtns");
-  el.innerHTML = "";
-  THEMES.forEach((t, i) => {
-    const btn = document.createElement("button");
-    btn.textContent = t.name;
-    btn.className = i === currentTheme ? "active" : "";
-    if (i === currentTheme) {
-      btn.style.borderColor = t.accent;
-      btn.style.background = t.accent2;
-      btn.style.color = t.accent;
-    }
-    btn.onclick = () => {
-      currentTheme = i;
-      document.documentElement.style.setProperty("--accent", t.accent);
-      document.documentElement.style.setProperty("--accent2", t.accent2);
-      renderThemeButtons();
-      if (!document.getElementById("previewArea").classList.contains("hidden")) generateImage();
-    };
-    el.appendChild(btn);
-  });
-}
-
-function renderList(arr, containerId, placeholder) {
-  const el = document.getElementById(containerId);
-  el.innerHTML = "";
-  arr.forEach((val, i) => {
-    const row = document.createElement("div");
-    row.className = "input-row";
-    const inp = document.createElement("input");
-    inp.value = val;
-    inp.placeholder = `${placeholder} ${i + 1}...`;
-    inp.oninput = () => {
-      if (containerId === "practiceList") practices[i] = inp.value;
-      else goals[i] = inp.value;
-    };
-    row.appendChild(inp);
-    if (arr.length > 1) {
-      const rm = document.createElement("button");
-      rm.className = "remove";
-      rm.textContent = "×";
-      rm.onclick = () => {
-        if (containerId === "practiceList") { practices.splice(i, 1); renderList(practices, containerId, placeholder); }
-        else { goals.splice(i, 1); renderList(goals, containerId, placeholder); }
-      };
-      row.appendChild(rm);
-    }
-    el.appendChild(row);
-  });
-}
-
-// ============ CANVAS ============
-function drawText(ctx, text, x, y, maxW, lineH) {
-  let line = "", curY = y;
-  for (const ch of text) {
-    const test = line + ch;
-    if (ctx.measureText(test).width > maxW && line) {
-      ctx.fillText(line, x, curY);
-      line = ch; curY += lineH;
-    } else { line = test; }
-  }
-  ctx.fillText(line, x, curY);
-  return curY;
-}
-
-function generateImage() {
-  if (!birdImageObj) return;
-
+(() => {
   const W = 1170, H = 2532;
-  const canvas = document.getElementById("canvas");
-  canvas.width = W; canvas.height = H;
-  const ctx = canvas.getContext("2d");
-  const theme = THEMES[currentTheme];
-  const tf = theme.titleFont;
-  const bf = theme.bodyFont;
 
-  // --- Draw bird photo as background, cover the entire canvas ---
-  const imgW = birdImageObj.width, imgH = birdImageObj.height;
-  const scale = Math.max(W / imgW, H / imgH);
-  const sw = W / scale, sh = H / scale;
-  const sx = (imgW - sw) / 2, sy = (imgH - sh) / 2;
-  ctx.drawImage(birdImageObj, sx, sy, sw, sh, 0, 0, W, H);
+  // ===== 8 THEMES =====
+  const THEMES = [
+    {
+      id: "onyx", name: "墨金", chip: ["#07080b","#d8b45f"],
+      bg: ["#06070a","#0d1018","#151b2c","#080a10"],
+      accent: "#d8b45f", accent2: "rgba(216,180,95,.14)",
+      text: "#efe7d7", sub: "rgba(239,231,215,.56)", dim: "rgba(239,231,215,.26)",
+      ghost: "rgba(239,231,215,.05)", line: "rgba(216,180,95,.26)", motif: "mineral"
+    },
+    {
+      id: "pine", name: "青山", chip: ["#07100c","#8bc99a"],
+      bg: ["#06100b","#10231a","#1a3429","#0a1811"],
+      accent: "#8bc99a", accent2: "rgba(139,201,154,.13)",
+      text: "#e3f1e2", sub: "rgba(227,241,226,.54)", dim: "rgba(227,241,226,.24)",
+      ghost: "rgba(227,241,226,.05)", line: "rgba(139,201,154,.26)", motif: "mountain"
+    },
+    {
+      id: "paper", name: "霜纸", chip: ["#eee9df","#222222"],
+      bg: ["#f4f0e8","#e8e2d8","#dcd4c8","#eee8de"],
+      accent: "#171717", accent2: "rgba(23,23,23,.07)",
+      text: "#171717", sub: "rgba(23,23,23,.54)", dim: "rgba(23,23,23,.20)",
+      ghost: "rgba(23,23,23,.04)", line: "rgba(23,23,23,.20)", motif: "paper"
+    },
+    {
+      id: "violet", name: "暮云", chip: ["#0c0912","#b49bff"],
+      bg: ["#090711","#171126","#2a2140","#120d1f"],
+      accent: "#b49bff", accent2: "rgba(180,155,255,.12)",
+      text: "#ebe5f6", sub: "rgba(235,229,246,.52)", dim: "rgba(235,229,246,.22)",
+      ghost: "rgba(235,229,246,.05)", line: "rgba(180,155,255,.24)", motif: "cloud"
+    },
+    {
+      id: "copper", name: "赤铜", chip: ["#120706","#ed8b57"],
+      bg: ["#100606","#24100e","#3a1d14","#160b09"],
+      accent: "#ed8b57", accent2: "rgba(237,139,87,.12)",
+      text: "#f5dfd0", sub: "rgba(245,223,208,.52)", dim: "rgba(245,223,208,.22)",
+      ghost: "rgba(245,223,208,.05)", line: "rgba(237,139,87,.24)", motif: "ember"
+    },
+    {
+      id: "ocean", name: "深海", chip: ["#060a10","#5ba4cf"],
+      bg: ["#050810","#0a1828","#122a3e","#081420"],
+      accent: "#5ba4cf", accent2: "rgba(91,164,207,.12)",
+      text: "#deeaf4", sub: "rgba(222,234,244,.52)", dim: "rgba(222,234,244,.22)",
+      ghost: "rgba(222,234,244,.05)", line: "rgba(91,164,207,.24)", motif: "wave"
+    },
+    {
+      id: "rose", name: "枯玫", chip: ["#100808","#c47a7a"],
+      bg: ["#0e0808","#1e100f","#2e1818","#160c0c"],
+      accent: "#c4897a", accent2: "rgba(196,137,122,.12)",
+      text: "#f2e4de", sub: "rgba(242,228,222,.52)", dim: "rgba(242,228,222,.22)",
+      ghost: "rgba(242,228,222,.05)", line: "rgba(196,137,122,.24)", motif: "petal"
+    },
+    {
+      id: "carbon", name: "碳黑", chip: ["#0c0c0c","#888888"],
+      bg: ["#0a0a0a","#111111","#181818","#0e0e0e"],
+      accent: "#999999", accent2: "rgba(153,153,153,.10)",
+      text: "#e0e0e0", sub: "rgba(224,224,224,.48)", dim: "rgba(224,224,224,.20)",
+      ghost: "rgba(224,224,224,.04)", line: "rgba(153,153,153,.20)", motif: "grid"
+    },
+  ];
 
-  // --- Dark overlay ---
-  ctx.fillStyle = theme.overlay;
-  ctx.fillRect(0, 0, W, H);
+  const SF_SANS = 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif';
+  const SF_SERIF = 'ui-serif, "Songti SC", "Noto Serif SC", "Source Han Serif SC", "STSong", serif';
 
-  // --- Extra gradient at bottom for text readability ---
-  const bottomGrad = ctx.createLinearGradient(0, H * 0.35, 0, H);
-  bottomGrad.addColorStop(0, "rgba(0,0,0,0)");
-  bottomGrad.addColorStop(0.3, "rgba(0,0,0,0.25)");
-  bottomGrad.addColorStop(1, "rgba(0,0,0,0.5)");
-  ctx.fillStyle = bottomGrad;
-  ctx.fillRect(0, 0, W, H);
+  const DEFAULTS = {
+    themeIndex: 0,
+    themeLine: "",
+    mainGoal: "",
+    goals: ["", "", ""],
+    habits: ["", ""],
+    motto: ""
+  };
 
-  // --- Decorative vertical rule ---
-  ctx.strokeStyle = theme.accent;
-  ctx.globalAlpha = 0.1;
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(W * 0.1, H * 0.42);
-  ctx.lineTo(W * 0.1, H * 0.92);
-  ctx.stroke();
-  ctx.globalAlpha = 1;
+  const state = loadState();
+  let els;
 
-  ctx.fillStyle = theme.accent;
-  ctx.globalAlpha = 0.2;
-  ctx.beginPath();
-  ctx.arc(W * 0.1, H * 0.415, 5, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.globalAlpha = 1;
+  function loadState() {
+    try {
+      const s = JSON.parse(localStorage.getItem("weekWallV3") || "null");
+      return s ? { ...cloneDefaults(), ...s } : cloneDefaults();
+    } catch { return cloneDefaults(); }
+  }
+  function saveState() { localStorage.setItem("weekWallV3", JSON.stringify(state)); }
+  function cloneDefaults() { return JSON.parse(JSON.stringify(DEFAULTS)); }
 
-  // --- Watermark: year & week ---
-  ctx.save();
-  ctx.textAlign = "center";
-  ctx.font = `200 220px "Helvetica Neue", "Arial", sans-serif`;
-  ctx.fillStyle = theme.watermark;
-  ctx.fillText(String(getYear()), W * 0.5, H * 0.26);
-  ctx.font = `200 320px "Helvetica Neue", "Arial", sans-serif`;
-  ctx.fillStyle = theme.watermark;
-  ctx.fillText(`W${String(getWeekNum()).padStart(2, "0")}`, W * 0.5, H * 0.42);
-  ctx.restore();
+  // ===== DATE HELPERS =====
+  function getISOInfo(d = new Date()) {
+    const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    const day = date.getUTCDay() || 7;
+    date.setUTCDate(date.getUTCDate() + 4 - day);
+    const isoYear = date.getUTCFullYear();
+    const yearStart = new Date(Date.UTC(isoYear, 0, 1));
+    const week = Math.ceil((((date - yearStart) / 86400000) + 1) / 7);
+    return { year: isoYear, week };
+  }
+  function getWeekRange(d = new Date()) {
+    const day = d.getDay() || 7;
+    const mon = new Date(d); mon.setDate(d.getDate() - day + 1);
+    const sun = new Date(mon); sun.setDate(mon.getDate() + 6);
+    const f = x => `${x.getMonth()+1}.${String(x.getDate()).padStart(2,"0")}`;
+    return `${f(mon)}—${f(sun)}`;
+  }
+  function weekLabel() { const {year,week} = getISOInfo(); return `${year} · W${String(week).padStart(2,"0")}`; }
 
-  // === Content in lower 52% ===
-  const CONTENT_TOP = H * 0.46;
-  let cy = CONTENT_TOP;
-  const LX = W * 0.14;
-  const RX = W * 0.88;
-  const TW = RX - LX;
+  // ===== UI =====
+  function setCssTheme() {
+    const t = THEMES[state.themeIndex];
+    document.documentElement.style.setProperty("--accent", t.accent);
+    document.documentElement.style.setProperty("--accent-soft", t.accent2);
+    document.documentElement.style.setProperty("--bg", t.bg[0]);
+  }
 
-  const ap = practices.filter(g => g.trim());
-  const ag = goals.filter(g => g.trim());
-
-  // --- 长期修炼 ---
-  if (ap.length > 0) {
-    ctx.font = `64px "${tf}", cursive`;
-    ctx.fillStyle = theme.accent;
-    ctx.textAlign = "left";
-    ctx.fillText("长期修炼", LX, cy);
-    cy += 24;
-    ctx.strokeStyle = theme.accent;
-    ctx.globalAlpha = 0.3;
-    ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(LX, cy); ctx.lineTo(LX + 160, cy); ctx.stroke();
-    ctx.globalAlpha = 1;
-    cy += 56;
-
-    ap.forEach(g => {
-      ctx.font = `28px "${bf}", serif`;
-      ctx.fillStyle = theme.dim;
-      ctx.textAlign = "left";
-      ctx.fillText("—", LX, cy);
-      ctx.font = `42px "${bf}", serif`;
-      ctx.fillStyle = theme.text;
-      const endY = drawText(ctx, g, LX + 52, cy, TW - 52, 64);
-      cy = endY + 62;
+  function renderThemes() {
+    els.themeGrid.innerHTML = "";
+    THEMES.forEach((t, i) => {
+      const btn = document.createElement("button");
+      btn.className = `themeBtn${i === state.themeIndex ? " active" : ""}`;
+      btn.type = "button";
+      btn.innerHTML = `<span class="dot" style="background:linear-gradient(135deg,${t.chip[0]},${t.chip[1]})"></span><span>${t.name}</span>`;
+      btn.addEventListener("click", () => { state.themeIndex = i; saveState(); setCssTheme(); renderThemes(); generate(); });
+      els.themeGrid.appendChild(btn);
     });
   }
 
-  // --- Gap ---
-  if (ap.length > 0 && ag.length > 0) cy += 80;
-
-  // --- 本周目标 ---
-  if (ag.length > 0) {
-    ctx.font = `64px "${tf}", cursive`;
-    ctx.fillStyle = theme.accent;
-    ctx.textAlign = "left";
-    ctx.fillText("本周目标", LX, cy);
-    cy += 24;
-    ctx.strokeStyle = theme.accent;
-    ctx.globalAlpha = 0.3;
-    ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(LX, cy); ctx.lineTo(LX + 160, cy); ctx.stroke();
-    ctx.globalAlpha = 1;
-    cy += 56;
-
-    ag.forEach((g, i) => {
-      ctx.font = `italic 300 36px "Helvetica Neue", sans-serif`;
-      ctx.fillStyle = theme.accent;
-      ctx.globalAlpha = 0.5;
-      ctx.textAlign = "left";
-      ctx.fillText(`${i + 1}.`, LX, cy);
-      ctx.globalAlpha = 1;
-      ctx.font = `42px "${bf}", serif`;
-      ctx.fillStyle = theme.text;
-      const endY = drawText(ctx, g, LX + 56, cy, TW - 56, 64);
-      cy = endY + 62;
+  function renderList(key, container, max, placeholder) {
+    container.innerHTML = "";
+    state[key].forEach((item, i) => {
+      const row = document.createElement("div"); row.className = "row";
+      const input = document.createElement("input");
+      input.value = item; input.maxLength = key === "goals" ? 38 : 18;
+      input.placeholder = `${placeholder} ${i+1}`;
+      input.addEventListener("input", () => { state[key][i] = input.value; saveState(); generate(); });
+      const rm = document.createElement("button"); rm.type = "button"; rm.className = "removeBtn"; rm.textContent = "×";
+      rm.addEventListener("click", () => {
+        state[key].splice(i, 1);
+        if (!state[key].length) state[key].push("");
+        saveState(); renderAll(); generate();
+      });
+      row.append(input, rm); container.appendChild(row);
     });
+    document.getElementById(key === "goals" ? "addGoal" : "addHabit").disabled = state[key].length >= max;
   }
 
-  // --- Motto ---
-  const motto = document.getElementById("mottoInput").value.trim();
-  if (motto) {
-    cy += 40;
-    ctx.font = `32px "${bf}", serif`;
-    ctx.fillStyle = theme.sub;
-    ctx.textAlign = "right";
-    ctx.fillText(motto, RX, cy);
-    ctx.textAlign = "left";
+  function bindFields() {
+    els.themeLine.value = state.themeLine;
+    els.mainGoal.value = state.mainGoal;
+    els.motto.value = state.motto;
+    els.themeLine.addEventListener("input", () => { state.themeLine = els.themeLine.value; saveState(); generate(); });
+    els.mainGoal.addEventListener("input", () => { state.mainGoal = els.mainGoal.value; saveState(); generate(); });
+    els.motto.addEventListener("input", () => { state.motto = els.motto.value; saveState(); generate(); });
+    document.getElementById("addGoal").addEventListener("click", () => { if (state.goals.length < 5) state.goals.push(""); saveState(); renderAll(); generate(); });
+    document.getElementById("addHabit").addEventListener("click", () => { if (state.habits.length < 5) state.habits.push(""); saveState(); renderAll(); generate(); });
+    els.generateBtn.addEventListener("click", generate);
+    els.resetBtn.addEventListener("click", () => { Object.assign(state, cloneDefaults()); saveState(); renderAll(); generate(); });
+    els.randomBtn.addEventListener("click", () => {
+      let n = Math.floor(Math.random() * THEMES.length);
+      if (n === state.themeIndex) n = (n + 1) % THEMES.length;
+      state.themeIndex = n; saveState(); renderAll(); generate();
+    });
+    els.downloadBtn.addEventListener("click", download);
   }
 
-  // --- Photo credit at very bottom ---
-  ctx.font = `22px "${bf}", serif`;
-  ctx.fillStyle = "rgba(255,255,255,0.15)";
-  ctx.textAlign = "right";
-  ctx.fillText(`📷 ${birdPhotographer} / Unsplash`, RX, H * 0.97);
-  ctx.textAlign = "left";
-}
+  function renderAll() {
+    els.weekPill.textContent = weekLabel();
+    setCssTheme(); renderThemes();
+    renderList("goals", els.goalList, 5, "辅助目标");
+    renderList("habits", els.habitList, 5, "修炼");
+    els.themeLine.value = state.themeLine;
+    els.mainGoal.value = state.mainGoal;
+    els.motto.value = state.motto;
+  }
 
-function downloadImage() {
-  const canvas = document.getElementById("canvas");
-  const link = document.createElement("a");
-  link.download = `wallpaper-${getYear()}-W${String(getWeekNum()).padStart(2, "0")}.png`;
-  link.href = canvas.toDataURL("image/png");
-  link.click();
-}
+  // ===== CANVAS HELPERS =====
+  function roundedRect(ctx, x, y, w, h, r) {
+    const rr = Math.min(r, w/2, h/2);
+    ctx.beginPath();
+    ctx.moveTo(x+rr, y); ctx.arcTo(x+w,y,x+w,y+h,rr); ctx.arcTo(x+w,y+h,x,y+h,rr);
+    ctx.arcTo(x,y+h,x,y,rr); ctx.arcTo(x,y,x+w,y,rr); ctx.closePath();
+  }
 
-// ============ INIT ============
-function init() {
-  document.getElementById("weekLabelUI").textContent = getWeekLabel();
-  const t = THEMES[currentTheme];
-  document.documentElement.style.setProperty("--accent", t.accent);
-  document.documentElement.style.setProperty("--accent2", t.accent2);
-  renderThemeButtons();
-  renderList(practices, "practiceList", "修炼");
-  renderList(goals, "goalList", "目标");
+  function drawGrain(ctx, opacity=.05, strength=22) {
+    const step = 2, cols = Math.ceil(W/step), rows = Math.ceil(H/step);
+    const img = ctx.createImageData(cols, rows);
+    for (let i = 0; i < img.data.length; i+=4) {
+      const n = 128 + (Math.random()-.5)*strength;
+      img.data[i]=n; img.data[i+1]=n; img.data[i+2]=n; img.data[i+3]=255*opacity;
+    }
+    const gc = document.createElement("canvas"); gc.width=cols; gc.height=rows;
+    gc.getContext("2d").putImageData(img, 0, 0);
+    ctx.save(); ctx.imageSmoothingEnabled=false; ctx.drawImage(gc,0,0,W,H); ctx.restore();
+  }
 
-  document.getElementById("addPractice").onclick = () => {
-    if (practices.length < 5) { practices.push(""); renderList(practices, "practiceList", "修炼"); }
-  };
-  document.getElementById("addGoal").onclick = () => {
-    if (goals.length < 7) { goals.push(""); renderList(goals, "goalList", "目标"); }
-  };
+  function fitFont(ctx, text, max, min, family, maxW, weight=500) {
+    let s = max;
+    while (s > min) { ctx.font = `${weight} ${s}px ${family}`; if (ctx.measureText(text).width <= maxW) return s; s -= 2; }
+    return min;
+  }
 
-  document.getElementById("refreshBird").onclick = fetchBirdPhoto;
-  document.getElementById("searchBtn").onclick = fetchBirdPhoto;
-  document.getElementById("searchInput").onkeydown = (e) => { if (e.key === "Enter") fetchBirdPhoto(); };
+  function wrapText(ctx, text, x, y, maxW, lineH, maxLines=99) {
+    const src = String(text||"").replace(/\s+/g," ").trim();
+    if (!src) return {y, lines:0};
+    const chars = [...src]; let line = "", lines = [];
+    for (const ch of chars) {
+      const t = line + ch;
+      if (ctx.measureText(t).width > maxW && line) { lines.push(line); line = ch; if (lines.length===maxLines) break; }
+      else { line = t; }
+    }
+    if (lines.length < maxLines && line) lines.push(line);
+    if (lines.length===maxLines && chars.join("").length > lines.join("").length) {
+      lines[maxLines-1] = lines[maxLines-1].replace(/[，。；、,.!?！？\s]*$/,"") + "…";
+    }
+    lines.forEach((ln,i) => ctx.fillText(ln, x, y + i*lineH));
+    return { y: y + Math.max(0, lines.length-1)*lineH, lines: lines.length };
+  }
 
-  document.getElementById("genBtn").onclick = () => {
-    if (!birdImageObj) { alert("请等待背景图片加载完成"); return; }
-    document.getElementById("previewArea").classList.remove("hidden");
-    setTimeout(generateImage, 60);
-  };
-  document.getElementById("saveBtn").onclick = downloadImage;
+  // ===== MOTIF BACKGROUNDS =====
+  function drawMineral(ctx, t) {
+    for (let i = 0; i < 8; i++) {
+      ctx.strokeStyle = i%3===0 ? t.line : "rgba(255,255,255,.05)";
+      ctx.lineWidth = i%3===0 ? 1.2 : .6; ctx.globalAlpha = .5;
+      ctx.beginPath(); const y = 180+i*200;
+      ctx.moveTo(-100, y+Math.sin(i)*60); ctx.bezierCurveTo(280,y-200,480,y+240,W+120,y+20); ctx.stroke();
+    }
+    const g = ctx.createRadialGradient(W*.78,H*.22,0,W*.78,H*.22,520);
+    g.addColorStop(0,"rgba(216,180,95,.18)"); g.addColorStop(1,"rgba(216,180,95,0)");
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  }
 
-  // Load first bird photo
-  fetchBirdPhoto();
-}
+  function drawMountain(ctx, t) {
+    for (let l=0;l<4;l++) {
+      ctx.beginPath(); const base=H*(.34+l*.06);
+      ctx.moveTo(0,base+120);
+      for (let x=0;x<=W;x+=80) { const y=base+Math.sin(x/130+l)*46+Math.cos(x/230)*30; ctx.lineTo(x,y); }
+      ctx.lineTo(W,base+360); ctx.lineTo(0,base+360); ctx.closePath();
+      ctx.fillStyle=`rgba(139,201,154,${.05+l*.022})`; ctx.fill();
+    }
+    for (let i=0;i<7;i++) { const x=120+i*150; const g=ctx.createLinearGradient(x,H*.12,x,H*.86);
+      g.addColorStop(0,"rgba(255,255,255,.06)"); g.addColorStop(1,"rgba(255,255,255,0)");
+      ctx.fillStyle=g; ctx.fillRect(x,H*.1,1,H*.82);
+    }
+  }
 
-document.addEventListener("DOMContentLoaded", init);
+  function drawPaper(ctx, t) {
+    ctx.globalCompositeOperation="multiply";
+    ctx.fillStyle="rgba(120,90,45,.05)";
+    for (let i=0;i<150;i++) { ctx.fillRect(Math.random()*W,Math.random()*H,1+Math.random()*5,1+Math.random()*18); }
+    ctx.strokeStyle="rgba(0,0,0,.05)";
+    for (let i=0;i<12;i++) { ctx.beginPath(); const y=160+i*190;
+      ctx.moveTo(-20,y); ctx.bezierCurveTo(W*.25,y-50,W*.5,y+65,W+20,y-15); ctx.stroke();
+    }
+  }
+
+  function drawCloud(ctx, t) {
+    for (let i=0;i<7;i++) {
+      const x=W*(.15+Math.random()*.7), y=H*(.12+Math.random()*.38), r=220+Math.random()*280;
+      const g=ctx.createRadialGradient(x,y,0,x,y,r);
+      g.addColorStop(0,`rgba(180,155,255,${.08+Math.random()*.05})`); g.addColorStop(1,"rgba(180,155,255,0)");
+      ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    }
+  }
+
+  function drawEmber(ctx, t) {
+    const g=ctx.createRadialGradient(W*.82,H*.18,0,W*.82,H*.18,680);
+    g.addColorStop(0,"rgba(237,139,87,.24)"); g.addColorStop(1,"rgba(237,139,87,0)");
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    for (let i=0;i<60;i++) {
+      ctx.fillStyle=`rgba(237,139,87,${.04+Math.random()*.14})`;
+      ctx.beginPath(); ctx.arc(Math.random()*W,H*(.1+Math.random()*.55),Math.random()*2.4+.5,0,Math.PI*2); ctx.fill();
+    }
+  }
+
+  function drawWave(ctx, t) {
+    for (let l=0;l<5;l++) {
+      ctx.beginPath(); ctx.strokeStyle=`rgba(91,164,207,${.06+l*.02})`;
+      ctx.lineWidth=1.5; const base=H*(.2+l*.08);
+      ctx.moveTo(-50,base);
+      for (let x=-50;x<=W+50;x+=6) { const y=base+Math.sin(x*.008+l*1.2)*80+Math.cos(x*.015+l)*40; ctx.lineTo(x,y); }
+      ctx.stroke();
+    }
+    const g=ctx.createRadialGradient(W*.3,H*.35,0,W*.3,H*.35,600);
+    g.addColorStop(0,"rgba(91,164,207,.14)"); g.addColorStop(1,"rgba(91,164,207,0)");
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  }
+
+  function drawPetal(ctx, t) {
+    for (let i=0;i<18;i++) {
+      const cx=Math.random()*W, cy=H*(.08+Math.random()*.5);
+      ctx.save(); ctx.translate(cx,cy); ctx.rotate(Math.random()*Math.PI);
+      ctx.beginPath(); ctx.ellipse(0,0,8+Math.random()*20,30+Math.random()*50,0,0,Math.PI*2);
+      ctx.fillStyle=`rgba(196,137,122,${.03+Math.random()*.04})`; ctx.fill();
+      ctx.restore();
+    }
+    const g=ctx.createRadialGradient(W*.6,H*.25,0,W*.6,H*.25,500);
+    g.addColorStop(0,"rgba(196,137,122,.12)"); g.addColorStop(1,"rgba(196,137,122,0)");
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  }
+
+  function drawGrid(ctx, t) {
+    ctx.strokeStyle="rgba(153,153,153,.06)"; ctx.lineWidth=1;
+    for (let x=0;x<=W;x+=80) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+    for (let y=0;y<=H;y+=80) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+    const g=ctx.createRadialGradient(W*.5,H*.3,0,W*.5,H*.3,600);
+    g.addColorStop(0,"rgba(153,153,153,.06)"); g.addColorStop(1,"rgba(153,153,153,0)");
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  }
+
+  const MOTIFS = { mineral: drawMineral, mountain: drawMountain, paper: drawPaper, cloud: drawCloud, ember: drawEmber, wave: drawWave, petal: drawPetal, grid: drawGrid };
+
+  // ===== CANVAS SECTIONS =====
+  function drawBackground(ctx, t) {
+    const grad=ctx.createLinearGradient(0,0,W*.15,H);
+    t.bg.forEach((c,i) => grad.addColorStop(i/(t.bg.length-1),c));
+    ctx.fillStyle=grad; ctx.fillRect(0,0,W,H);
+    ctx.save();
+    ctx.globalCompositeOperation = t.id==="paper" ? "multiply" : "screen";
+    (MOTIFS[t.motif]||drawMineral)(ctx, t);
+    ctx.restore();
+    drawGrain(ctx, t.id==="paper" ? .07 : .05, t.id==="paper" ? 26 : 20);
+    const vig=ctx.createRadialGradient(W*.52,H*.38,H*.1,W*.52,H*.45,H*.74);
+    vig.addColorStop(0,"rgba(0,0,0,0)");
+    vig.addColorStop(1, t.id==="paper" ? "rgba(80,62,32,.14)" : "rgba(0,0,0,.5)");
+    ctx.fillStyle=vig; ctx.fillRect(0,0,W,H);
+  }
+
+  function drawWeekMark(ctx, t) {
+    const {year,week} = getISOInfo();
+    ctx.save(); ctx.textAlign="left"; ctx.textBaseline="alphabetic"; ctx.fillStyle=t.ghost;
+    ctx.font=`800 390px ${SF_SANS}`; ctx.fillText(`W${String(week).padStart(2,"0")}`, -28, 468);
+    ctx.font=`700 168px ${SF_SANS}`; ctx.fillText(String(year), 614, 282);
+    ctx.globalAlpha=.7; ctx.strokeStyle=t.line; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(86,610); ctx.lineTo(1084,610); ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawTopMeta(ctx, t) {
+    const {year,week} = getISOInfo();
+    ctx.save(); ctx.fillStyle=t.sub;
+    ctx.font=`600 28px ${SF_SANS}`; ctx.textAlign="left";
+    ctx.fillText(`${year} / WEEK ${String(week).padStart(2,"0")}`, 86, 128);
+    ctx.textAlign="right"; ctx.fillText(getWeekRange(), W-86, 128);
+    ctx.restore();
+  }
+
+  function drawThemeLine(ctx, t, text) {
+    const val = text.trim() || "本周主题";
+    ctx.save(); ctx.textAlign="left"; ctx.fillStyle=t.text;
+    const sz = fitFont(ctx, val, 58, 36, SF_SERIF, W-172, 540);
+    ctx.font=`540 ${sz}px ${SF_SERIF}`;
+    wrapText(ctx, val, 86, 760, W-172, sz*1.32, 2);
+    ctx.fillStyle=t.accent;
+    roundedRect(ctx, 86, 822+sz*.84, 134, 5, 3); ctx.fill();
+    ctx.restore();
+  }
+
+  function drawMainCard(ctx, t, mainGoal) {
+    const x=86, y=1010, w=W-172, h=520;
+    ctx.save();
+    roundedRect(ctx,x,y,w,h,34);
+    const g=ctx.createLinearGradient(x,y,x,y+h);
+    g.addColorStop(0, t.id==="paper" ? "rgba(255,255,255,.40)" : "rgba(255,255,255,.08)");
+    g.addColorStop(1, t.id==="paper" ? "rgba(255,255,255,.18)" : "rgba(255,255,255,.025)");
+    ctx.fillStyle=g; ctx.fill();
+    ctx.strokeStyle = t.id==="paper" ? "rgba(0,0,0,.09)" : "rgba(255,255,255,.10)";
+    ctx.lineWidth=1; ctx.stroke();
+    ctx.fillStyle=t.accent;
+    ctx.font=`700 25px ${SF_SANS}`; ctx.fillText("PRIORITY", x+44, y+72);
+    ctx.globalAlpha=.86; ctx.fillStyle=t.text;
+    const txt = mainGoal.trim() || "写下本周核心目标。";
+    const sz = txt.length > 44 ? 47 : 54;
+    ctx.font=`560 ${sz}px ${SF_SERIF}`;
+    wrapText(ctx, txt, x+44, y+170, w-88, sz*1.56, 4);
+    ctx.globalAlpha=1; ctx.strokeStyle=t.line; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(x+44,y+h-76); ctx.lineTo(x+w-44,y+h-76); ctx.stroke();
+    ctx.fillStyle=t.dim; ctx.font=`500 24px ${SF_SANS}`;
+    ctx.fillText("ONE THING THAT MOVES THE WEEK", x+44, y+h-36);
+    ctx.restore();
+  }
+
+  function drawGoals(ctx, t, goals) {
+    const x=86, y=1646, w=W-172;
+    const list = goals.map(s=>s.trim()).filter(Boolean).slice(0,5);
+    ctx.save(); ctx.fillStyle=t.sub; ctx.font=`600 26px ${SF_SANS}`;
+    ctx.fillText("SUPPORTING MOVES", x, y);
+    ctx.strokeStyle=t.line; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(x+292,y-10); ctx.lineTo(x+w,y-10); ctx.stroke();
+    let cy = y+90;
+    if (!list.length) list.push("写下辅助目标。");
+    list.forEach((g,i) => {
+      ctx.fillStyle=t.accent; ctx.globalAlpha=.7;
+      ctx.font=`700 44px ${SF_SANS}`; ctx.fillText(String(i+1).padStart(2,"0"), x, cy);
+      ctx.globalAlpha=1; ctx.fillStyle=t.text;
+      ctx.font=`430 38px ${SF_SERIF}`;
+      const r = wrapText(ctx, g, x+86, cy, w-86, 55, 2);
+      cy = Math.max(cy+86, r.y+54);
+    });
+    ctx.restore(); return cy;
+  }
+
+  function drawHabitsAndMotto(ctx, t, habits, motto) {
+    const filtered = habits.map(s=>s.trim()).filter(Boolean).slice(0,5);
+    const habitText = filtered.length ? filtered.join(" · ") : "长期修炼";
+    const m = motto.trim();
+    ctx.save();
+    const bx=86, by=H-326, bw=W-172, bh=166;
+    roundedRect(ctx,bx,by,bw,bh,28);
+    ctx.fillStyle = t.id==="paper" ? "rgba(255,255,255,.24)" : "rgba(255,255,255,.04)";
+    ctx.fill();
+    ctx.strokeStyle = t.id==="paper" ? "rgba(0,0,0,.07)" : "rgba(255,255,255,.07)";
+    ctx.stroke();
+    ctx.fillStyle=t.accent; ctx.font=`700 22px ${SF_SANS}`; ctx.fillText("PRACTICE", bx+34, by+55);
+    ctx.fillStyle=t.sub; ctx.font=`390 31px ${SF_SERIF}`;
+    wrapText(ctx, habitText, bx+34, by+106, bw-68, 42, 2);
+    if (m) {
+      ctx.textAlign="right"; ctx.fillStyle=t.dim;
+      ctx.font=`380 28px ${SF_SERIF}`; ctx.fillText(m, W-86, H-86);
+    }
+    ctx.restore();
+  }
+
+  function drawSafeBottom(ctx, t) {
+    ctx.save(); ctx.textAlign="left"; ctx.fillStyle=t.ghost;
+    ctx.font=`700 132px ${SF_SANS}`; ctx.fillText("PLAN", 80, H-52);
+    ctx.restore();
+  }
+
+  // ===== GENERATE =====
+  function generate() {
+    const ctx = els.canvas.getContext("2d");
+    const t = THEMES[state.themeIndex];
+    els.canvas.width = W; els.canvas.height = H;
+    drawBackground(ctx, t);
+    drawWeekMark(ctx, t);
+    drawSafeBottom(ctx, t);
+    drawTopMeta(ctx, t);
+    drawThemeLine(ctx, t, state.themeLine);
+    drawMainCard(ctx, t, state.mainGoal);
+    drawGoals(ctx, t, state.goals);
+    drawHabitsAndMotto(ctx, t, state.habits, state.motto);
+    els.previewMeta.textContent = `${weekLabel()} · ${getWeekRange()} · 1170 × 2532 PNG`;
+  }
+
+  function download() {
+    generate();
+    const a = document.createElement("a");
+    const {year,week} = getISOInfo();
+    a.download = `wallpaper-${year}-W${String(week).padStart(2,"0")}.png`;
+    a.href = els.canvas.toDataURL("image/png"); a.click();
+  }
+
+  // ===== INIT =====
+  document.addEventListener("DOMContentLoaded", () => {
+    els = {
+      themeGrid: document.getElementById("themeGrid"),
+      weekPill: document.getElementById("weekPill"),
+      themeLine: document.getElementById("themeLine"),
+      mainGoal: document.getElementById("mainGoal"),
+      goalList: document.getElementById("goalList"),
+      habitList: document.getElementById("habitList"),
+      motto: document.getElementById("motto"),
+      canvas: document.getElementById("wallpaper"),
+      generateBtn: document.getElementById("generateBtn"),
+      resetBtn: document.getElementById("resetBtn"),
+      downloadBtn: document.getElementById("downloadBtn"),
+      randomBtn: document.getElementById("randomBtn"),
+      previewMeta: document.getElementById("previewMeta"),
+    };
+    renderAll(); bindFields();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(generate);
+    else generate();
+  });
+})();
 </script>
 </body>
 </html>
