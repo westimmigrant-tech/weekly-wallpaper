@@ -5,315 +5,277 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<title>一周壁纸生成器 · V2</title>
+<title>每周壁纸</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --bg: #0a0b0e;
-    --panel: rgba(255,255,255,.055);
-    --panel-strong: rgba(255,255,255,.085);
-    --line: rgba(255,255,255,.13);
-    --text: rgba(255,255,255,.88);
-    --muted: rgba(255,255,255,.48);
-    --dim: rgba(255,255,255,.28);
+    --bg: #0c0d10;
+    --panel: rgba(255,255,255,.05);
+    --line: rgba(255,255,255,.11);
+    --text: rgba(255,255,255,.9);
+    --muted: rgba(255,255,255,.5);
+    --dim: rgba(255,255,255,.3);
     --accent: #d8b45f;
-    --accent-soft: rgba(216,180,95,.16);
-    --shadow: 0 24px 80px rgba(0,0,0,.42);
+    --accent-soft: rgba(216,180,95,.14);
+    --shadow: 0 30px 90px rgba(0,0,0,.46);
+    --sans: "Noto Sans SC", ui-sans-serif, -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+    --serif: "Noto Serif SC", "Songti SC", "Source Han Serif SC", "STSong", serif;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
   html, body { min-height: 100%; }
 
   body {
     background:
-      radial-gradient(circle at 20% 0%, rgba(216,180,95,.14), transparent 32rem),
-      radial-gradient(circle at 90% 25%, rgba(100,120,180,.12), transparent 34rem),
+      radial-gradient(circle at 16% -4%, rgba(216,180,95,.10), transparent 30rem),
+      radial-gradient(circle at 92% 18%, rgba(110,130,190,.10), transparent 34rem),
       var(--bg);
     color: var(--text);
-    font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+    font-family: var(--sans);
     -webkit-font-smoothing: antialiased;
     display: flex;
     justify-content: center;
-    padding: 28px 16px 56px;
+    padding: 36px 18px 64px;
   }
 
   button, input, textarea, select { font: inherit; }
 
   .app {
-    width: min(1120px, 100%);
+    width: min(1140px, 100%);
     display: grid;
-    grid-template-columns: minmax(320px, 460px) minmax(320px, 1fr);
-    gap: 24px;
+    grid-template-columns: minmax(330px, 470px) minmax(320px, 1fr);
+    gap: 28px;
     align-items: start;
   }
 
   .studio, .previewCard {
     border: 1px solid var(--line);
-    background: linear-gradient(180deg, rgba(255,255,255,.075), rgba(255,255,255,.035));
+    background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.025));
     box-shadow: var(--shadow);
-    border-radius: 28px;
-    backdrop-filter: blur(24px);
+    border-radius: 30px;
+    backdrop-filter: blur(26px);
   }
 
-  .studio { padding: 26px; }
+  .studio { padding: 30px 30px 34px; }
 
-  .brand {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-
+  .brand { margin-bottom: 26px; }
   .brand h1 {
-    font-size: 24px;
-    line-height: 1.2;
-    font-weight: 520;
-    letter-spacing: .16em;
+    font-family: var(--serif);
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: .22em;
   }
-
   .brand p {
-    margin-top: 8px;
+    margin-top: 11px;
     color: var(--muted);
-    font-size: 13px;
-    letter-spacing: .08em;
+    font-size: 13.5px;
+    letter-spacing: .04em;
+    line-height: 1.5;
   }
 
-  .weekPill {
-    flex: none;
-    padding: 8px 11px;
-    border-radius: 999px;
-    border: 1px solid var(--line);
-    color: var(--accent);
-    background: var(--accent-soft);
-    font: 600 12px/1 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-    letter-spacing: .12em;
+  .secHead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 26px 0 14px;
   }
+  .secHead:first-of-type { margin-top: 0; }
+  .secHead strong {
+    font-family: var(--serif);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    color: var(--text);
+  }
+  .secHead span { color: var(--dim); font-size: 12px; letter-spacing: .02em; }
 
   .themeGrid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    margin-bottom: 22px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
   }
-
   .themeBtn {
-    min-height: 56px;
     cursor: pointer;
     border-radius: 16px;
     border: 1px solid var(--line);
-    background: var(--panel);
-    color: var(--muted);
+    background: transparent;
+    padding: 8px 8px 10px;
     display: grid;
-    place-items: center;
-    gap: 5px;
-    transition: transform .18s ease, border-color .18s ease, background .18s ease, color .18s ease;
+    justify-items: center;
+    gap: 8px;
+    transition: border-color .2s ease, transform .2s ease, background .2s ease;
   }
-
-  .themeBtn:hover { transform: translateY(-1px); border-color: rgba(255,255,255,.28); }
-  .themeBtn.active { color: var(--text); border-color: var(--accent); background: var(--accent-soft); }
-
-  .dot {
-    width: 18px;
-    height: 18px;
-    border-radius: 999px;
-    border: 1px solid rgba(255,255,255,.28);
-    box-shadow: inset 0 0 0 999px rgba(255,255,255,.04);
+  .themeBtn:hover { transform: translateY(-2px); border-color: rgba(255,255,255,.26); }
+  .themeBtn.active { border-color: var(--accent); background: var(--accent-soft); }
+  .themeBtn canvas {
+    width: 100%;
+    aspect-ratio: 1170 / 2532;
+    border-radius: 9px;
+    display: block;
+    box-shadow: 0 6px 18px rgba(0,0,0,.4);
   }
-
-  .themeBtn span:last-child {
-    font-size: 12px;
-    letter-spacing: .1em;
+  .themeBtn .tname {
+    font-family: var(--serif);
+    font-size: 13px;
+    letter-spacing: .14em;
+    color: var(--muted);
   }
+  .themeBtn.active .tname { color: var(--text); }
 
-  .fieldGroup {
-    border-top: 1px solid var(--line);
-    padding-top: 18px;
-    margin-top: 18px;
-  }
-
-  .fieldHead {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    align-items: baseline;
-    margin-bottom: 10px;
-  }
-
-  .fieldHead strong {
-    font-size: 14px;
-    font-weight: 650;
-    letter-spacing: .12em;
-  }
-
-  .fieldHead span {
-    color: var(--dim);
-    font-size: 12px;
-  }
-
+  .field { margin-top: 14px; }
   input, textarea {
     width: 100%;
-    border: 1px solid rgba(255,255,255,.11);
-    border-radius: 16px;
-    background: rgba(0,0,0,.22);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 15px;
+    background: rgba(0,0,0,.24);
     color: var(--text);
     outline: none;
-    padding: 13px 14px;
+    padding: 14px 15px;
+    font-family: var(--serif);
+    font-size: 15.5px;
+    letter-spacing: .02em;
     transition: border-color .18s ease, background .18s ease;
   }
+  textarea { min-height: 92px; resize: vertical; line-height: 1.7; }
+  input::placeholder, textarea::placeholder { color: rgba(255,255,255,.26); font-family: var(--serif); }
+  input:focus, textarea:focus { border-color: var(--accent); background: rgba(0,0,0,.3); }
 
-  textarea { min-height: 90px; resize: vertical; line-height: 1.62; }
-  input::placeholder, textarea::placeholder { color: rgba(255,255,255,.28); }
-  input:focus, textarea:focus { border-color: var(--accent); background: rgba(0,0,0,.28); }
-
-  .list { display: grid; gap: 8px; }
-  .row { display: grid; grid-template-columns: 1fr 34px; gap: 8px; align-items: center; }
-
+  .list { display: grid; gap: 9px; }
+  .row { display: grid; grid-template-columns: 1fr 46px; gap: 9px; align-items: stretch; }
   .removeBtn, .addBtn {
     cursor: pointer;
-    border: 1px solid rgba(255,255,255,.11);
-    background: rgba(255,255,255,.045);
+    border: 1px solid rgba(255,255,255,.1);
+    background: rgba(255,255,255,.04);
     color: var(--muted);
     border-radius: 14px;
     transition: border-color .18s ease, color .18s ease, background .18s ease;
   }
-
-  .removeBtn { height: 46px; }
-  .addBtn { width: 100%; height: 44px; margin-top: 10px; letter-spacing: .12em; }
+  .removeBtn { font-size: 19px; line-height: 1; }
+  .addBtn { width: 100%; height: 46px; margin-top: 11px; letter-spacing: .16em; font-size: 13.5px; }
   .removeBtn:hover, .addBtn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+  .addBtn:disabled { opacity: .4; cursor: not-allowed; }
 
-  .actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 24px;
+  .toggleRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 22px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
   }
-
-  .primary, .secondary {
-    height: 50px;
-    border-radius: 16px;
-    cursor: pointer;
-    letter-spacing: .16em;
-    transition: transform .18s ease, filter .18s ease, border-color .18s ease;
-  }
-
-  .primary {
-    border: 1px solid var(--accent);
-    color: #111;
-    background: var(--accent);
-    font-weight: 700;
-  }
-
-  .secondary {
+  .toggleRow .lbl { font-family: var(--serif); font-size: 14px; letter-spacing: .1em; color: var(--muted); }
+  .switch { position: relative; width: 48px; height: 28px; cursor: pointer; flex: none; }
+  .switch input { display: none; }
+  .switch .track {
+    position: absolute; inset: 0;
+    border-radius: 999px;
+    background: rgba(255,255,255,.1);
     border: 1px solid var(--line);
-    color: var(--muted);
-    background: rgba(255,255,255,.045);
+    transition: background .2s ease, border-color .2s ease;
   }
+  .switch .knob {
+    position: absolute; top: 3px; left: 3px;
+    width: 21px; height: 21px; border-radius: 999px;
+    background: var(--muted);
+    transition: transform .2s ease, background .2s ease;
+  }
+  .switch input:checked + .track { background: var(--accent-soft); border-color: var(--accent); }
+  .switch input:checked + .track + .knob { transform: translateX(20px); background: var(--accent); }
 
+  .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 26px; }
+  .primary, .secondary {
+    height: 52px;
+    border-radius: 15px;
+    cursor: pointer;
+    letter-spacing: .18em;
+    font-size: 14px;
+    transition: transform .18s ease, filter .18s ease, border-color .18s ease, color .18s ease;
+  }
+  .primary { border: 1px solid var(--accent); color: #14130f; background: var(--accent); font-weight: 700; }
+  .secondary { border: 1px solid var(--line); color: var(--muted); background: rgba(255,255,255,.04); }
   .primary:hover, .secondary:hover { transform: translateY(-1px); }
   .secondary:hover { border-color: var(--accent); color: var(--accent); }
 
   .previewCard {
     position: sticky;
-    top: 20px;
-    padding: 22px;
+    top: 24px;
+    padding: 26px;
     display: grid;
     justify-items: center;
-    gap: 16px;
+    gap: 18px;
   }
-
   .phoneShell {
-    padding: 12px;
-    border-radius: 34px;
-    background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.035));
-    border: 1px solid rgba(255,255,255,.13);
-    box-shadow: 0 20px 70px rgba(0,0,0,.48);
+    padding: 13px;
+    border-radius: 40px;
+    background: linear-gradient(180deg, rgba(255,255,255,.13), rgba(255,255,255,.03));
+    border: 1px solid rgba(255,255,255,.14);
+    box-shadow: 0 26px 80px rgba(0,0,0,.5);
   }
-
-  canvas {
+  canvas#wallpaper {
     display: block;
-    width: min(320px, 62vw);
+    width: min(330px, 64vw);
     aspect-ratio: 1170 / 2532;
-    border-radius: 24px;
+    border-radius: 28px;
     background: #111;
   }
-
   .previewMeta {
     color: var(--dim);
-    font: 500 12px/1.6 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    font: 500 12px/1.6 var(--sans);
     letter-spacing: .08em;
     text-align: center;
   }
-
-  .previewActions {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
+  .previewActions { display: flex; gap: 11px; flex-wrap: wrap; justify-content: center; }
   .smallBtn {
-    min-width: 132px;
-    height: 42px;
+    min-width: 134px; height: 44px;
     border-radius: 14px;
     border: 1px solid var(--line);
-    background: rgba(255,255,255,.045);
+    background: rgba(255,255,255,.04);
     color: var(--muted);
     cursor: pointer;
     transition: border-color .18s ease, color .18s ease, background .18s ease;
-    font-size: 13px;
-    letter-spacing: .12em;
+    font-size: 13px; letter-spacing: .12em;
   }
-
   .smallBtn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
 
-  @media (max-width: 860px) {
-    body { padding-top: 18px; }
+  @media (max-width: 880px) {
+    body { padding-top: 22px; }
     .app { grid-template-columns: 1fr; }
     .previewCard { position: static; }
-    .themeGrid { grid-template-columns: repeat(2, 1fr); }
-    canvas { width: min(320px, 82vw); }
+    canvas#wallpaper { width: min(330px, 80vw); }
   }
 </style>
 </head>
 <body>
   <main class="app">
-    <section class="studio" aria-label="壁纸内容设置">
+    <section class="studio" aria-label="壁纸设置">
       <div class="brand">
-        <div>
-          <h1>一周壁纸</h1>
-          <p>主目标优先 · 杂志封面式构图</p>
-        </div>
-        <div class="weekPill" id="weekPill">WEEK</div>
+        <h1>每周壁纸</h1>
+        <p>把本周最重要的事，安静地放在锁屏上。</p>
       </div>
 
+      <div class="secHead"><strong>气质</strong><span>选一个方向</span></div>
       <div class="themeGrid" id="themeGrid"></div>
 
-      <div class="fieldGroup">
-        <div class="fieldHead"><strong>本周主题</strong><span>一句短句，决定画面气质</span></div>
-        <input id="themeLine" maxlength="26" placeholder="例如：慢慢推进，但保持锋利" />
-      </div>
+      <div class="secHead"><strong>主目标</strong><span>本周唯一关键的事</span></div>
+      <textarea id="mainGoal" maxlength="40" placeholder="例如：完成第三章的悬疑推进设计。"></textarea>
 
-      <div class="fieldGroup">
-        <div class="fieldHead"><strong>唯一关键目标</strong><span>建议只写一件最重要的事</span></div>
-        <textarea id="mainGoal" maxlength="68" placeholder="例如：完成第三章的悬疑推进设计，让读者明确感到危险正在收束。"></textarea>
-      </div>
+      <div class="secHead"><strong>辅助目标</strong><span>最多 3 条</span></div>
+      <div class="list" id="goalList"></div>
+      <button class="addBtn" id="addGoal" type="button">＋ 添加一条</button>
 
-      <div class="fieldGroup">
-        <div class="fieldHead"><strong>辅助目标</strong><span>最多 3 条</span></div>
-        <div class="list" id="goalList"></div>
-        <button class="addBtn" id="addGoal" type="button">＋ 添加目标</button>
-      </div>
+      <div class="secHead"><strong>寄语</strong><span>可选</span></div>
+      <input id="motto" maxlength="24" placeholder="例如：不要等灵感，先坐下来。" />
 
-      <div class="fieldGroup">
-        <div class="fieldHead"><strong>长期修炼</strong><span>长期习惯，弱化呈现</span></div>
-        <div class="list" id="habitList"></div>
-        <button class="addBtn" id="addHabit" type="button">＋ 添加修炼</button>
-      </div>
-
-      <div class="fieldGroup">
-        <div class="fieldHead"><strong>底部寄语</strong><span>可选</span></div>
-        <input id="motto" maxlength="30" placeholder="例如：不要等灵感，先坐下来。" />
+      <div class="toggleRow">
+        <span class="lbl">显示周数</span>
+        <label class="switch">
+          <input type="checkbox" id="showWeek" />
+          <span class="track"></span>
+          <span class="knob"></span>
+        </label>
       </div>
 
       <div class="actions">
@@ -329,94 +291,96 @@
       <div class="previewMeta" id="previewMeta">1170 × 2532 · PNG · iPhone 壁纸比例</div>
       <div class="previewActions">
         <button class="smallBtn" id="downloadBtn" type="button">保存图片</button>
-        <button class="smallBtn" id="randomBtn" type="button">随机主题</button>
+        <button class="smallBtn" id="randomBtn" type="button">随机一个</button>
       </div>
     </aside>
   </main>
 
 <script>
 (() => {
-  const W = 1170;
-  const H = 2532;
-  const SANS = `ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Helvetica Neue", Arial, sans-serif`;
-  const SERIF = `"Songti SC", "Noto Serif SC", "Source Han Serif SC", "STSong", serif`;
+  const W = 1170, H = 2532;
+  const MX = 110, CW = W - MX * 2;
+  const SERIF = `"Noto Serif SC", "Songti SC", "Source Han Serif SC", "STSong", serif`;
+
+  // ---- 六个完整美学方向 ----
   const THEMES = [
     {
-      id: "auric", name: "曜金", chip: ["#090b10", "#d6b56a"],
-      bg: ["#06070b", "#0c1017", "#171d29", "#090c12"],
-      accent: "#d6b56a", accent2: "rgba(214,181,106,.14)",
-      text: "#efe7d9", sub: "rgba(239,231,217,.58)", dim: "rgba(239,231,217,.28)",
-      ghost: "rgba(239,231,217,.055)", line: "rgba(214,181,106,.28)", motif: "mineral"
+      id: "paper", name: "宣纸", motif: "paper", light: true,
+      bg: ["#f3ebda", "#ece1ca", "#e3d6bb"],
+      text: "#262019", sub: "rgba(38,32,25,.62)", dim: "rgba(38,32,25,.4)", accent: "#a8392c"
     },
     {
-      id: "pine", name: "松雾", chip: ["#07100d", "#8fb79b"],
-      bg: ["#07100d", "#11211a", "#1a3228", "#09150f"],
-      accent: "#8fb79b", accent2: "rgba(143,183,155,.14)",
-      text: "#e4eee6", sub: "rgba(228,238,230,.56)", dim: "rgba(228,238,230,.26)",
-      ghost: "rgba(228,238,230,.052)", line: "rgba(143,183,155,.26)", motif: "mountain"
+      id: "peaks", name: "远岫", motif: "mountains", light: false,
+      bg: ["#243a55", "#365067", "#5d7587", "#94a8af"],
+      text: "#f4f5f1", sub: "rgba(244,245,241,.74)", dim: "rgba(244,245,241,.5)", accent: "#ecd2a0"
     },
     {
-      id: "paper", name: "霜纸", chip: ["#efe9de", "#242424"],
-      bg: ["#f5f1e9", "#e9e3d8", "#ddd5c8", "#f0ebe1"],
-      accent: "#1b1b1b", accent2: "rgba(27,27,27,.07)",
-      text: "#1b1b1b", sub: "rgba(27,27,27,.56)", dim: "rgba(27,27,27,.22)",
-      ghost: "rgba(27,27,27,.045)", line: "rgba(27,27,27,.22)", motif: "paper"
+      id: "night", name: "夜", motif: "night", light: false,
+      bg: ["#0a0c11", "#0f131b", "#161c27"],
+      text: "#eaecf2", sub: "rgba(234,236,242,.64)", dim: "rgba(234,236,242,.38)", accent: "#aeb9d0"
     },
     {
-      id: "violet", name: "夜紫", chip: ["#0b0912", "#b39cff"],
-      bg: ["#080711", "#151123", "#261f3f", "#100d1c"],
-      accent: "#b39cff", accent2: "rgba(179,156,255,.14)",
-      text: "#ece6f7", sub: "rgba(236,230,247,.55)", dim: "rgba(236,230,247,.24)",
-      ghost: "rgba(236,230,247,.052)", line: "rgba(179,156,255,.24)", motif: "cloud"
+      id: "sand", name: "暖砂", motif: "sand", light: true,
+      bg: ["#eedcc2", "#e7caa3", "#dcb486"],
+      text: "#46331f", sub: "rgba(70,51,31,.62)", dim: "rgba(70,51,31,.42)", accent: "#bd4b2a"
     },
     {
-      id: "terracotta", name: "赤陶", chip: ["#140907", "#df8c67"],
-      bg: ["#110807", "#24120e", "#3a1f18", "#170d0a"],
-      accent: "#df8c67", accent2: "rgba(223,140,103,.14)",
-      text: "#f4e1d6", sub: "rgba(244,225,214,.54)", dim: "rgba(244,225,214,.24)",
-      ghost: "rgba(244,225,214,.05)", line: "rgba(223,140,103,.24)", motif: "ember"
+      id: "pine", name: "松墨", motif: "pine", light: false,
+      bg: ["#0c1411", "#13211a", "#1b3025"],
+      text: "#e7efe7", sub: "rgba(231,239,231,.66)", dim: "rgba(231,239,231,.4)", accent: "#cdb072"
     },
     {
-      id: "tide", name: "深潮", chip: ["#07111a", "#74c6c9"],
-      bg: ["#061019", "#0d1d29", "#153345", "#0a151d"],
-      accent: "#74c6c9", accent2: "rgba(116,198,201,.14)",
-      text: "#e2eff0", sub: "rgba(226,239,240,.55)", dim: "rgba(226,239,240,.24)",
-      ghost: "rgba(226,239,240,.05)", line: "rgba(116,198,201,.24)", motif: "wave"
+      id: "celadon", name: "霁青", motif: "celadon", light: true,
+      bg: ["#d6ded7", "#c3d1cb", "#aec1bb"],
+      text: "#27322e", sub: "rgba(39,50,46,.64)", dim: "rgba(39,50,46,.42)", accent: "#356458"
     },
     {
-      id: "moon", name: "月灰", chip: ["#121417", "#c2c7d1"],
-      bg: ["#111317", "#1a1e25", "#262d36", "#14171c"],
-      accent: "#c2c7d1", accent2: "rgba(194,199,209,.12)",
-      text: "#eef1f5", sub: "rgba(238,241,245,.55)", dim: "rgba(238,241,245,.24)",
-      ghost: "rgba(238,241,245,.05)", line: "rgba(194,199,209,.22)", motif: "mist"
+      id: "wine", name: "绛", motif: "ember", light: false,
+      bg: ["#170809", "#27110f", "#3a1a17", "#1d0c0c"],
+      text: "#f2ddd5", sub: "rgba(242,221,213,.66)", dim: "rgba(242,221,213,.4)", accent: "#dba06a"
     },
     {
-      id: "moss", name: "苔庭", chip: ["#0f120e", "#9dac72"],
-      bg: ["#0c100c", "#171d15", "#262f21", "#111510"],
-      accent: "#9dac72", accent2: "rgba(157,172,114,.14)",
-      text: "#edf0e3", sub: "rgba(237,240,227,.54)", dim: "rgba(237,240,227,.24)",
-      ghost: "rgba(237,240,227,.05)", line: "rgba(157,172,114,.24)", motif: "mountain"
+      id: "dawn", name: "晨曦", motif: "dawn", light: true,
+      bg: ["#c6cad9", "#d9cfcf", "#edd0bd", "#f4d6b2"],
+      text: "#3a322c", sub: "rgba(58,50,44,.62)", dim: "rgba(58,50,44,.42)", accent: "#cc7a55"
+    },
+    {
+      id: "frost", name: "霜", motif: "frost", light: true,
+      bg: ["#eef1f5", "#e6eaf0", "#dce1e9"],
+      text: "#2b3036", sub: "rgba(43,48,54,.6)", dim: "rgba(43,48,54,.4)", accent: "#5d6e7e"
+    },
+    {
+      id: "indigo", name: "绀青", motif: "indigo", light: false,
+      bg: ["#0a0e22", "#121835", "#1d264d", "#0e132b"],
+      text: "#e7eaf6", sub: "rgba(231,234,246,.66)", dim: "rgba(231,234,246,.4)", accent: "#b9c4ee"
+    },
+    {
+      id: "zen", name: "砂庭", motif: "zen", light: true,
+      bg: ["#e6e2da", "#ddd7cc", "#d2ccbe"],
+      text: "#33302a", sub: "rgba(51,48,42,.6)", dim: "rgba(51,48,42,.4)", accent: "#8a6d4b"
+    },
+    {
+      id: "aster", name: "紫苑", motif: "aster", light: true,
+      bg: ["#dcd7e6", "#cfc7dd", "#bcb2cf"],
+      text: "#322c3d", sub: "rgba(50,44,61,.62)", dim: "rgba(50,44,61,.42)", accent: "#6a5a8c"
     }
   ];
 
   const DEFAULTS = {
     themeIndex: 0,
-    themeLine: "慢慢推进，但保持锋利",
     mainGoal: "完成本周最重要的推进，不被琐事稀释注意力。",
     goals: ["整理一个可复用的工作流", "完成三次稳定运动", "留出两晚做深度阅读"],
-    habits: ["阅读", "运动", "早睡"],
-    motto: "把注意力交给真正重要的事。"
+    motto: "把注意力交给真正重要的事。",
+    showWeek: true
   };
 
   const state = loadState();
   const els = {
     themeGrid: document.getElementById("themeGrid"),
-    weekPill: document.getElementById("weekPill"),
-    themeLine: document.getElementById("themeLine"),
     mainGoal: document.getElementById("mainGoal"),
     goalList: document.getElementById("goalList"),
-    habitList: document.getElementById("habitList"),
     motto: document.getElementById("motto"),
+    showWeek: document.getElementById("showWeek"),
     canvas: document.getElementById("wallpaper"),
     generateBtn: document.getElementById("generateBtn"),
     resetBtn: document.getElementById("resetBtn"),
@@ -424,23 +388,16 @@
     randomBtn: document.getElementById("randomBtn"),
     previewMeta: document.getElementById("previewMeta")
   };
+  const thumbCanvases = [];
 
+  function cloneDefaults() { return JSON.parse(JSON.stringify(DEFAULTS)); }
   function loadState() {
     try {
-      const saved = JSON.parse(localStorage.getItem("weeklyWallpaperV2") || "null");
+      const saved = JSON.parse(localStorage.getItem("weeklyWallpaperV3") || "null");
       return saved ? { ...cloneDefaults(), ...saved } : cloneDefaults();
-    } catch (e) {
-      return cloneDefaults();
-    }
+    } catch (e) { return cloneDefaults(); }
   }
-
-  function saveState() {
-    localStorage.setItem("weeklyWallpaperV2", JSON.stringify(state));
-  }
-
-  function cloneDefaults() {
-    return JSON.parse(JSON.stringify(DEFAULTS));
-  }
+  function saveState() { localStorage.setItem("weeklyWallpaperV3", JSON.stringify(state)); }
 
   function getISOInfo(date = new Date()) {
     const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
@@ -451,147 +408,28 @@
     const week = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
     return { year: isoYear, week };
   }
-
-  function getWeekRange(date = new Date()) {
-    const d = new Date(date);
-    const day = d.getDay() || 7;
-    const monday = new Date(d);
-    monday.setDate(d.getDate() - day + 1);
-    const sunday = new Date(monday);
-    sunday.setDate(monday.getDate() + 6);
-    const fmt = x => `${x.getMonth() + 1}.${String(x.getDate()).padStart(2, "0")}`;
-    return `${fmt(monday)}—${fmt(sunday)}`;
-  }
-
   function weekLabel() {
     const { year, week } = getISOInfo();
-    return `${year} · W${String(week).padStart(2, "0")}`;
+    return `${year} · 第 ${week} 周`;
   }
 
-  function setCssTheme() {
-    const t = THEMES[state.themeIndex];
-    document.documentElement.style.setProperty("--accent", t.accent);
-    document.documentElement.style.setProperty("--accent-soft", t.accent2);
-    document.documentElement.style.setProperty("--bg", t.bg[0]);
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      let t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
   }
+  function setLS(ctx, px) { try { ctx.letterSpacing = px + "px"; } catch (e) {} }
 
-  function renderThemes() {
-    els.themeGrid.innerHTML = "";
-    THEMES.forEach((t, i) => {
-      const btn = document.createElement("button");
-      btn.className = `themeBtn${i === state.themeIndex ? " active" : ""}`;
-      btn.type = "button";
-      btn.innerHTML = `<span class="dot" style="background: linear-gradient(135deg, ${t.chip[0]}, ${t.chip[1]})"></span><span>${t.name}</span>`;
-      btn.addEventListener("click", () => {
-        state.themeIndex = i;
-        saveState();
-        setCssTheme();
-        renderThemes();
-        generate();
-      });
-      els.themeGrid.appendChild(btn);
-    });
-  }
-
-  function renderList(key, container, max, placeholder) {
-    container.innerHTML = "";
-    state[key].forEach((item, index) => {
-      const row = document.createElement("div");
-      row.className = "row";
-      const input = document.createElement("input");
-      input.value = item;
-      input.maxLength = key === "goals" ? 30 : 14;
-      input.placeholder = `${placeholder} ${index + 1}`;
-      input.addEventListener("input", () => {
-        state[key][index] = input.value;
-        saveState();
-        generate();
-      });
-      const remove = document.createElement("button");
-      remove.type = "button";
-      remove.className = "removeBtn";
-      remove.textContent = "×";
-      remove.setAttribute("aria-label", "删除");
-      remove.addEventListener("click", () => {
-        state[key].splice(index, 1);
-        if (!state[key].length) state[key].push("");
-        saveState();
-        renderAll();
-        generate();
-      });
-      row.append(input, remove);
-      container.appendChild(row);
-    });
-    const addId = key === "goals" ? "addGoal" : "addHabit";
-    document.getElementById(addId).disabled = state[key].length >= max;
-  }
-
-  function bindFields() {
-    els.themeLine.value = state.themeLine;
-    els.mainGoal.value = state.mainGoal;
-    els.motto.value = state.motto;
-
-    els.themeLine.addEventListener("input", () => { state.themeLine = els.themeLine.value; saveState(); generate(); });
-    els.mainGoal.addEventListener("input", () => { state.mainGoal = els.mainGoal.value; saveState(); generate(); });
-    els.motto.addEventListener("input", () => { state.motto = els.motto.value; saveState(); generate(); });
-
-    document.getElementById("addGoal").addEventListener("click", () => {
-      if (state.goals.length < 3) state.goals.push("");
-      saveState(); renderAll(); generate();
-    });
-    document.getElementById("addHabit").addEventListener("click", () => {
-      if (state.habits.length < 5) state.habits.push("");
-      saveState(); renderAll(); generate();
-    });
-    els.generateBtn.addEventListener("click", generate);
-    els.resetBtn.addEventListener("click", () => {
-      Object.assign(state, cloneDefaults());
-      saveState();
-      renderAll();
-      generate();
-    });
-    els.randomBtn.addEventListener("click", () => {
-      const next = Math.floor(Math.random() * THEMES.length);
-      state.themeIndex = next === state.themeIndex ? (next + 1) % THEMES.length : next;
-      saveState();
-      renderAll();
-      generate();
-    });
-    els.downloadBtn.addEventListener("click", download);
-  }
-
-  function renderAll() {
-    els.weekPill.textContent = weekLabel();
-    setCssTheme();
-    renderThemes();
-    renderList("goals", els.goalList, 3, "辅助目标");
-    renderList("habits", els.habitList, 5, "长期修炼");
-    els.themeLine.value = state.themeLine;
-    els.mainGoal.value = state.mainGoal;
-    els.motto.value = state.motto;
-  }
-
-  function roundedRect(ctx, x, y, w, h, r) {
-    const rr = Math.min(r, w / 2, h / 2);
-    ctx.beginPath();
-    ctx.moveTo(x + rr, y);
-    ctx.arcTo(x + w, y, x + w, y + h, rr);
-    ctx.arcTo(x + w, y + h, x, y + h, rr);
-    ctx.arcTo(x, y + h, x, y, rr);
-    ctx.arcTo(x, y, x + w, y, rr);
-    ctx.closePath();
-  }
-
-  function drawGrain(ctx, opacity = 0.055, strength = 24) {
-    const step = 2;
-    const cols = Math.ceil(W / step);
-    const rows = Math.ceil(H / step);
+  // ---------- canvas helpers ----------
+  function drawGrain(ctx, opacity, strength) {
+    const step = 2, cols = Math.ceil(W / step), rows = Math.ceil(H / step);
     const image = ctx.createImageData(cols, rows);
     for (let i = 0; i < image.data.length; i += 4) {
       const n = 128 + (Math.random() - .5) * strength;
-      image.data[i] = n;
-      image.data[i + 1] = n;
-      image.data[i + 2] = n;
+      image.data[i] = image.data[i + 1] = image.data[i + 2] = n;
       image.data[i + 3] = 255 * opacity;
     }
     const grain = document.createElement("canvas");
@@ -603,382 +441,407 @@
     ctx.restore();
   }
 
-  function drawBackground(ctx, t) {
-    const grad = ctx.createLinearGradient(0, 0, W * .16, H);
-    t.bg.forEach((c, i) => grad.addColorStop(i / (t.bg.length - 1), c));
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, W, H);
-
-    ctx.save();
-    ctx.globalCompositeOperation = t.id === "paper" ? "multiply" : "screen";
-
-    if (t.motif === "mountain") drawMountain(ctx, t);
-    else if (t.motif === "paper") drawPaper(ctx, t);
-    else if (t.motif === "cloud") drawCloud(ctx, t);
-    else if (t.motif === "ember") drawEmber(ctx, t);
-    else if (t.motif === "wave") drawWave(ctx, t);
-    else if (t.motif === "mist") drawMist(ctx, t);
-    else drawMineral(ctx, t);
-
-    ctx.restore();
-    drawGrain(ctx, t.id === "paper" ? .078 : .05, t.id === "paper" ? 26 : 18);
-
-    const vignette = ctx.createRadialGradient(W * .5, H * .34, H * .08, W * .5, H * .42, H * .74);
-    vignette.addColorStop(0, "rgba(0,0,0,0)");
-    vignette.addColorStop(1, t.id === "paper" ? "rgba(76,60,36,.14)" : "rgba(0,0,0,.48)");
-    ctx.fillStyle = vignette;
-    ctx.fillRect(0, 0, W, H);
-  }
-
-  function drawMineral(ctx, t) {
-    for (let i = 0; i < 9; i++) {
-      ctx.strokeStyle = i % 3 === 0 ? t.line : "rgba(255,255,255,.055)";
-      ctx.lineWidth = i % 3 === 0 ? 1.2 : .7;
-      ctx.globalAlpha = .55;
-      ctx.beginPath();
-      const y = 200 + i * 180;
-      ctx.moveTo(-100, y + Math.sin(i) * 60);
-      ctx.bezierCurveTo(260, y - 180, 460, y + 220, W + 120, y + 20);
-      ctx.stroke();
-    }
-    const glow = ctx.createRadialGradient(W * .78, H * .22, 0, W * .78, H * .22, 520);
-    glow.addColorStop(0, "rgba(216,180,95,.20)");
-    glow.addColorStop(1, "rgba(216,180,95,0)");
-    ctx.fillStyle = glow;
-    ctx.fillRect(0, 0, W, H);
-  }
-
-  function drawMountain(ctx, t) {
-    for (let layer = 0; layer < 4; layer++) {
-      ctx.beginPath();
-      const base = H * (.34 + layer * .065);
-      ctx.moveTo(0, base + 120);
-      for (let x = 0; x <= W; x += 90) {
-        const y = base + Math.sin(x / 130 + layer) * 46 + Math.cos(x / 230) * 30;
-        ctx.lineTo(x, y);
-      }
-      ctx.lineTo(W, base + 360);
-      ctx.lineTo(0, base + 360);
-      ctx.closePath();
-      ctx.fillStyle = `rgba(139,201,154,${0.06 + layer * .025})`;
-      ctx.fill();
-    }
-    for (let i = 0; i < 7; i++) {
-      const x = 120 + i * 150;
-      const grad = ctx.createLinearGradient(x, H * .12, x, H * .86);
-      grad.addColorStop(0, "rgba(255,255,255,.07)");
-      grad.addColorStop(1, "rgba(255,255,255,0)");
-      ctx.fillStyle = grad;
-      ctx.fillRect(x, H * .1, 1, H * .82);
-    }
-  }
-
-  function drawPaper(ctx, t) {
-    ctx.globalCompositeOperation = "multiply";
-    ctx.fillStyle = "rgba(120,90,45,.055)";
-    for (let i = 0; i < 150; i++) {
-      const x = Math.random() * W, y = Math.random() * H;
-      ctx.fillRect(x, y, 1 + Math.random() * 5, 1 + Math.random() * 18);
-    }
-    ctx.strokeStyle = "rgba(0,0,0,.06)";
-    for (let i = 0; i < 12; i++) {
-      ctx.beginPath();
-      const y = 160 + i * 190;
-      ctx.moveTo(-20, y);
-      ctx.bezierCurveTo(W * .25, y - 50, W * .5, y + 65, W + 20, y - 15);
-      ctx.stroke();
-    }
-  }
-
-  function drawCloud(ctx, t) {
-    for (let i = 0; i < 7; i++) {
-      const x = W * (.15 + Math.random() * .75);
-      const y = H * (.12 + Math.random() * .38);
-      const r = 220 + Math.random() * 280;
-      const g = ctx.createRadialGradient(x, y, 0, x, y, r);
-      g.addColorStop(0, `rgba(180,155,255,${.09 + Math.random() * .06})`);
-      g.addColorStop(1, "rgba(180,155,255,0)");
-      ctx.fillStyle = g;
-      ctx.fillRect(0, 0, W, H);
-    }
-  }
-
-  function drawEmber(ctx, t) {
-    const glow = ctx.createRadialGradient(W * .82, H * .18, 0, W * .82, H * .18, 680);
-    glow.addColorStop(0, "rgba(237,139,87,.26)");
-    glow.addColorStop(1, "rgba(237,139,87,0)");
-    ctx.fillStyle = glow;
-    ctx.fillRect(0, 0, W, H);
-    for (let i = 0; i < 70; i++) {
-      ctx.fillStyle = `rgba(237,139,87,${.05 + Math.random() * .16})`;
-      ctx.beginPath();
-      ctx.arc(Math.random() * W, H * (.1 + Math.random() * .55), Math.random() * 2.4 + .6, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  }
-
-  function drawWave(ctx, t) {
-    for (let i = 0; i < 8; i++) {
-      ctx.strokeStyle = i % 2 === 0 ? t.line : "rgba(255,255,255,.05)";
-      ctx.lineWidth = i % 2 === 0 ? 1.4 : .8;
-      ctx.globalAlpha = .7;
-      ctx.beginPath();
-      const y = H * (.22 + i * .085);
-      ctx.moveTo(-80, y);
-      ctx.bezierCurveTo(W * .22, y - 40, W * .44, y + 80, W * .7, y + 10);
-      ctx.bezierCurveTo(W * .88, y - 20, W * .96, y + 28, W + 100, y - 8);
-      ctx.stroke();
-    }
-    const glow = ctx.createRadialGradient(W * .82, H * .26, 0, W * .82, H * .26, 420);
-    glow.addColorStop(0, "rgba(116,198,201,.18)");
-    glow.addColorStop(1, "rgba(116,198,201,0)");
-    ctx.fillStyle = glow;
-    ctx.fillRect(0, 0, W, H);
-  }
-
-  function drawMist(ctx, t) {
-    for (let i = 0; i < 6; i++) {
-      const x = W * (.14 + Math.random() * .72);
-      const y = H * (.12 + Math.random() * .38);
-      const rx = 180 + Math.random() * 180;
-      const ry = 90 + Math.random() * 120;
-      const g = ctx.createRadialGradient(x, y, 0, x, y, rx);
-      g.addColorStop(0, `rgba(194,199,209,${.11 + Math.random() * .05})`);
-      g.addColorStop(1, "rgba(194,199,209,0)");
-      ctx.fillStyle = g;
-      ctx.beginPath();
-      ctx.ellipse(x, y, rx, ry, Math.random() * Math.PI, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    for (let i = 0; i < 5; i++) {
-      ctx.strokeStyle = "rgba(255,255,255,.05)";
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      const y = H * (.18 + i * .11);
-      ctx.moveTo(0, y);
-      ctx.bezierCurveTo(W * .24, y + 22, W * .58, y - 28, W, y + 12);
-      ctx.stroke();
-    }
-  }
-
-  function fitFont(ctx, text, maxSize, minSize, fontFamily, maxWidth, weight = 500) {
-    let size = maxSize;
-    while (size > minSize) {
-      ctx.font = `${weight} ${size}px ${fontFamily}`;
-      if (ctx.measureText(text).width <= maxWidth) return size;
-      size -= 2;
-    }
-    return minSize;
-  }
-
-  function wrapText(ctx, text, x, y, maxWidth, lineHeight, maxLines = 99) {
+  function wrapText(ctx, text, x, y, maxWidth, lineHeight, maxLines) {
     const source = String(text || "").replace(/\s+/g, " ").trim();
-    if (!source) return { y, lines: 0 };
+    if (!source) return { yEnd: y, lines: 0 };
     const chars = [...source];
-    let line = "";
-    let lines = [];
-
+    let line = "", lines = [];
     for (const ch of chars) {
       const test = line + ch;
       if (ctx.measureText(test).width > maxWidth && line) {
-        lines.push(line);
-        line = ch;
+        lines.push(line); line = ch;
         if (lines.length === maxLines) break;
-      } else {
-        line = test;
-      }
+      } else { line = test; }
     }
     if (lines.length < maxLines && line) lines.push(line);
-    if (lines.length === maxLines && chars.join("").length > lines.join("").length) {
+    const joined = lines.join("");
+    if (lines.length === maxLines && joined.length < chars.length) {
       lines[maxLines - 1] = lines[maxLines - 1].replace(/[，。；、,.!?！？\s]*$/, "") + "…";
     }
-
     lines.forEach((ln, i) => ctx.fillText(ln, x, y + i * lineHeight));
-    return { y: y + Math.max(0, lines.length - 1) * lineHeight, lines: lines.length };
+    return { yEnd: y + Math.max(0, lines.length - 1) * lineHeight, lines: lines.length };
   }
 
-  function drawWeekMark(ctx, t) {
-    const { year, week } = getISOInfo();
+  // ---------- motifs (drawn in full 1170×2532 space) ----------
+  const MOTIF = {
+    paper(ctx) {
+      ctx.save();
+      ctx.globalCompositeOperation = "multiply";
+      const g = ctx.createLinearGradient(0, H * .6, 0, H);
+      g.addColorStop(0, "rgba(44,36,26,0)");
+      g.addColorStop(1, "rgba(44,36,26,.12)");
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.moveTo(0, H * .87);
+      for (let x = 0; x <= W; x += 60) ctx.lineTo(x, H * .87 + Math.sin(x / 190) * 42 - Math.cos(x / 320) * 26);
+      ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = "rgba(44,36,26,.05)"; ctx.lineWidth = 1;
+      for (let i = 0; i < 9; i++) {
+        ctx.beginPath();
+        const y = H * .1 + i * H * .085;
+        ctx.moveTo(-20, y);
+        ctx.bezierCurveTo(W * .3, y - 44, W * .6, y + 54, W + 20, y - 12);
+        ctx.stroke();
+      }
+      ctx.restore();
+    },
+    mountains(ctx) {
+      ctx.save();
+      const mx = W * .72, my = H * .29, r = 150;
+      ctx.globalCompositeOperation = "screen";
+      const g = ctx.createRadialGradient(mx, my, 0, mx, my, r * 3.2);
+      g.addColorStop(0, "rgba(236,210,160,.5)");
+      g.addColorStop(.28, "rgba(236,210,160,.14)");
+      g.addColorStop(1, "rgba(236,210,160,0)");
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      ctx.globalCompositeOperation = "source-over";
+      ctx.fillStyle = "rgba(245,238,216,.92)";
+      ctx.beginPath(); ctx.arc(mx, my, r * .6, 0, 7); ctx.fill();
+      const ridges = [[.50, 60, "rgba(46,66,92,.40)"], [.60, 90, "rgba(32,50,74,.55)"], [.71, 120, "rgba(20,36,58,.72)"], [.83, 150, "rgba(10,20,36,.92)"]];
+      ridges.forEach(([fy, amp, col], idx) => {
+        ctx.fillStyle = col; ctx.beginPath();
+        const base = H * fy; ctx.moveTo(0, base);
+        for (let x = 0; x <= W; x += 40) ctx.lineTo(x, base + Math.sin(x / 170 + idx * 1.7) * amp * .5 + Math.cos(x / 300 + idx) * amp * .4);
+        ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath(); ctx.fill();
+      });
+      ctx.restore();
+    },
+    night(ctx) {
+      ctx.save();
+      ctx.globalCompositeOperation = "screen";
+      const mx = W * .78, my = H * .15;
+      const g = ctx.createRadialGradient(mx, my, 0, mx, my, 540);
+      g.addColorStop(0, "rgba(150,165,200,.2)");
+      g.addColorStop(1, "rgba(150,165,200,0)");
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      const rng = mulberry32(7);
+      ctx.fillStyle = "rgba(220,225,240,1)";
+      for (let i = 0; i < 30; i++) {
+        ctx.globalAlpha = .18 + rng() * .5;
+        ctx.beginPath();
+        ctx.arc(rng() * W, rng() * H * .62, rng() * 1.7 + .5, 0, 7);
+        ctx.fill();
+      }
+      ctx.restore();
+    },
+    sand(ctx) {
+      ctx.save();
+      const sx = W * .72, sy = H * .2;
+      const g = ctx.createRadialGradient(sx, sy, 0, sx, sy, 780);
+      g.addColorStop(0, "rgba(255,242,216,.6)");
+      g.addColorStop(.5, "rgba(255,228,188,.18)");
+      g.addColorStop(1, "rgba(255,228,188,0)");
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      ctx.globalCompositeOperation = "multiply";
+      const dg = ctx.createLinearGradient(0, H * .7, 0, H);
+      dg.addColorStop(0, "rgba(120,80,46,0)");
+      dg.addColorStop(1, "rgba(120,80,46,.13)");
+      ctx.fillStyle = dg;
+      ctx.beginPath(); ctx.moveTo(0, H * .82);
+      for (let x = 0; x <= W; x += 80) ctx.lineTo(x, H * .82 + Math.sin(x / 260) * 46);
+      ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath(); ctx.fill();
+      ctx.restore();
+    },
+    pine(ctx) {
+      ctx.save();
+      ctx.globalCompositeOperation = "screen";
+      for (let i = 0; i < 4; i++) {
+        const y = H * (.2 + i * .13);
+        const g = ctx.createLinearGradient(0, y - 130, 0, y + 130);
+        g.addColorStop(0, "rgba(180,205,180,0)");
+        g.addColorStop(.5, "rgba(180,205,180,.05)");
+        g.addColorStop(1, "rgba(180,205,180,0)");
+        ctx.fillStyle = g; ctx.fillRect(0, y - 130, W, 260);
+      }
+      const rng = mulberry32(42);
+      for (let i = 0; i < 5; i++) {
+        const x = W * (.12 + i * .19) + rng() * 30;
+        ctx.fillStyle = `rgba(205,176,114,${.045 + rng() * .03})`;
+        ctx.fillRect(x, H * .08, 2.4, H * .7);
+      }
+      ctx.restore();
+    },
+    celadon(ctx) {
+      ctx.save();
+      for (let i = 0; i < 3; i++) {
+        const cx = W * (.3 + i * .26), cy = H * (.2 + i * .14), rx = 540, ry = 165;
+        const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, rx);
+        g.addColorStop(0, "rgba(246,251,248,.42)");
+        g.addColorStop(1, "rgba(246,251,248,0)");
+        ctx.save(); ctx.translate(cx, cy); ctx.scale(1, ry / rx);
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, rx, 0, 7); ctx.fill();
+        ctx.restore();
+      }
+      ctx.globalCompositeOperation = "multiply";
+      const dg = ctx.createLinearGradient(0, H * .66, 0, H);
+      dg.addColorStop(0, "rgba(40,70,62,0)");
+      dg.addColorStop(1, "rgba(40,70,62,.14)");
+      ctx.fillStyle = dg;
+      ctx.beginPath(); ctx.moveTo(0, H * .8);
+      for (let x = 0; x <= W; x += 70) ctx.lineTo(x, H * .8 + Math.sin(x / 200) * 54 - Math.cos(x / 120) * 26);
+      ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath(); ctx.fill();
+      ctx.restore();
+    },
+    ember(ctx) {
+      ctx.save();
+      ctx.globalCompositeOperation = "screen";
+      const g = ctx.createRadialGradient(W * .5, H * .8, 0, W * .5, H * .8, 880);
+      g.addColorStop(0, "rgba(196,74,56,.3)");
+      g.addColorStop(.5, "rgba(150,46,40,.1)");
+      g.addColorStop(1, "rgba(150,46,40,0)");
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      const rng = mulberry32(13);
+      for (let i = 0; i < 64; i++) {
+        ctx.fillStyle = `rgba(232,156,112,${.05 + rng() * .18})`;
+        ctx.beginPath(); ctx.arc(rng() * W, H * (.4 + rng() * .55), rng() * 2.2 + .5, 0, 7); ctx.fill();
+      }
+      ctx.restore();
+    },
+    dawn(ctx) {
+      ctx.save();
+      const g = ctx.createRadialGradient(W * .5, H * .94, 0, W * .5, H * .94, 980);
+      g.addColorStop(0, "rgba(255,226,190,.62)");
+      g.addColorStop(.5, "rgba(255,206,178,.2)");
+      g.addColorStop(1, "rgba(255,206,178,0)");
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      ctx.globalCompositeOperation = "screen";
+      for (let i = 0; i < 3; i++) {
+        const y = H * (.5 + i * .12);
+        const bg = ctx.createLinearGradient(0, y - 90, 0, y + 90);
+        bg.addColorStop(0, "rgba(255,228,200,0)");
+        bg.addColorStop(.5, "rgba(255,228,200,.12)");
+        bg.addColorStop(1, "rgba(255,228,200,0)");
+        ctx.fillStyle = bg; ctx.fillRect(0, y - 90, W, 180);
+      }
+      ctx.restore();
+    },
+    frost(ctx) {
+      ctx.save();
+      const g = ctx.createLinearGradient(0, 0, 0, H);
+      g.addColorStop(0, "rgba(196,212,230,.28)");
+      g.addColorStop(1, "rgba(196,212,230,0)");
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      const rng = mulberry32(21);
+      for (let i = 0; i < 64; i++) {
+        const x = rng() * W, y = rng() * H, r = rng() * 3 + 1;
+        ctx.fillStyle = `rgba(255,255,255,${.35 + rng() * .5})`;
+        ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
+        ctx.fillStyle = `rgba(150,165,185,${.05 + rng() * .08})`;
+        ctx.beginPath(); ctx.arc(x + r, y + r, r * .6, 0, 7); ctx.fill();
+      }
+      ctx.restore();
+    },
+    indigo(ctx) {
+      ctx.save();
+      ctx.globalCompositeOperation = "screen";
+      const g = ctx.createRadialGradient(W * .5, H * .2, 0, W * .5, H * .2, 780);
+      g.addColorStop(0, "rgba(96,116,196,.22)");
+      g.addColorStop(1, "rgba(96,116,196,0)");
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      const rng = mulberry32(57);
+      for (let i = 0; i < 92; i++) {
+        ctx.globalAlpha = .15 + rng() * .5;
+        ctx.fillStyle = "rgba(212,222,248,1)";
+        ctx.beginPath(); ctx.arc(rng() * W, rng() * H, rng() * 1.4 + .3, 0, 7); ctx.fill();
+      }
+      ctx.restore();
+    },
+    zen(ctx) {
+      ctx.save();
+      const cx = W * .74, cy = H * .7;
+      ctx.strokeStyle = "rgba(120,104,82,.11)"; ctx.lineWidth = 2.4;
+      for (let r = 86; r < 1560; r += 70) {
+        ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+      }
+      ctx.fillStyle = "rgba(92,82,66,.2)";
+      ctx.beginPath(); ctx.ellipse(cx, cy, 44, 32, 0, 0, 7); ctx.fill();
+      ctx.restore();
+    },
+    aster(ctx) {
+      ctx.save();
+      for (let i = 0; i < 3; i++) {
+        const cx = W * (.3 + i * .26), cy = H * (.22 + i * .15), rx = 540, ry = 175;
+        const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, rx);
+        g.addColorStop(0, "rgba(236,228,250,.42)");
+        g.addColorStop(1, "rgba(236,228,250,0)");
+        ctx.save(); ctx.translate(cx, cy); ctx.scale(1, ry / rx);
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, rx, 0, 7); ctx.fill();
+        ctx.restore();
+      }
+      ctx.restore();
+    }
+  };
+
+  function drawBg(ctx, t, grain) {
+    const g = ctx.createLinearGradient(0, 0, W * .15, H);
+    t.bg.forEach((c, i) => g.addColorStop(i / (t.bg.length - 1), c));
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    ctx.save(); MOTIF[t.motif](ctx); ctx.restore();
+    if (grain) drawGrain(ctx, t.light ? .05 : .045, t.light ? 22 : 16);
+    const v = ctx.createRadialGradient(W * .5, H * .42, H * .12, W * .5, H * .5, H * .8);
+    v.addColorStop(0, "rgba(0,0,0,0)");
+    v.addColorStop(1, t.light ? "rgba(58,44,26,.12)" : "rgba(0,0,0,.42)");
+    ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
+  }
+
+  function drawForeground(ctx, t, st) {
+    ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
+
+    // 主目标 —— 周数作为引子
     ctx.save();
-    ctx.textAlign = "left";
-    ctx.textBaseline = "alphabetic";
-
-    ctx.fillStyle = t.ghost;
-    ctx.font = `780 320px ${SANS}`;
-    ctx.fillText(`W${String(week).padStart(2, "0")}`, 28, 640);
-
-    ctx.textAlign = "right";
-    ctx.font = `680 108px ${SANS}`;
-    ctx.fillStyle = t.id === "paper" ? "rgba(27,27,27,.07)" : t.ghost;
-    ctx.fillText(String(year), W - 86, 520);
-
-    ctx.globalAlpha = .82;
-    ctx.strokeStyle = t.line;
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(86, 704);
-    ctx.lineTo(W - 86, 704);
-    ctx.stroke();
+    ctx.globalAlpha = .85; ctx.fillStyle = t.accent;
+    ctx.fillRect(MX, 956, 38, 3);
+    ctx.globalAlpha = 1;
+    setLS(ctx, 9);
+    const { week } = getISOInfo();
+    ctx.fillStyle = t.sub; ctx.font = `500 28px ${SERIF}`;
+    ctx.fillText(st.showWeek ? `第 ${week} 周` : "本 周", MX, 1010);
+    setLS(ctx, 0);
+    const hero = (st.mainGoal || "").trim() || "写下本周唯一关键的事";
+    const hl = [...hero].length;
+    const heroSize = hl > 30 ? 60 : hl > 20 ? 68 : 76;
+    ctx.fillStyle = t.text; ctx.font = `500 ${heroSize}px ${SERIF}`;
+    const hr = wrapText(ctx, hero, MX, 1110, CW, heroSize * 1.42, 3);
     ctx.restore();
-  }
 
-  function drawTopMeta(ctx, t) {
-    const { year, week } = getISOInfo();
+    // 辅助目标
+    const sup = (st.goals || []).map(s => s.trim()).filter(Boolean).slice(0, 3);
+    let sy = hr.yEnd + 168;
     ctx.save();
-    ctx.fillStyle = t.sub;
-    ctx.font = `600 26px ${SANS}`;
-    ctx.textAlign = "left";
-    ctx.fillText(`${year} / WEEK ${String(week).padStart(2, "0")}`, 86, 770);
-    ctx.textAlign = "right";
-    ctx.fillText(getWeekRange(), W - 86, 770);
-    ctx.restore();
-  }
-
-  function drawThemeLine(ctx, t, text) {
-    const value = text.trim() || "本周主题";
-    ctx.save();
-    ctx.textAlign = "left";
-    ctx.fillStyle = t.text;
-    const size = fitFont(ctx, value, 52, 34, SERIF, W - 172, 520);
-    ctx.font = `520 ${size}px ${SERIF}`;
-    const wrapped = wrapText(ctx, value, 86, 860, W - 172, size * 1.24, 2);
-    const underlineY = wrapped.y + 28;
-    ctx.fillStyle = t.accent;
-    roundedRect(ctx, 86, underlineY, 118, 4, 3);
-    ctx.fill();
-    ctx.restore();
-  }
-
-  function drawMainCard(ctx, t, mainGoal) {
-    const x = 86, y = 1000, w = W - 172, h = 398;
-    ctx.save();
-    roundedRect(ctx, x, y, w, h, 32);
-    const grad = ctx.createLinearGradient(x, y, x, y + h);
-    grad.addColorStop(0, t.id === "paper" ? "rgba(255,255,255,.40)" : "rgba(255,255,255,.082)");
-    grad.addColorStop(1, t.id === "paper" ? "rgba(255,255,255,.18)" : "rgba(255,255,255,.028)");
-    ctx.fillStyle = grad;
-    ctx.fill();
-    ctx.strokeStyle = t.id === "paper" ? "rgba(0,0,0,.10)" : "rgba(255,255,255,.105)";
-    ctx.lineWidth = 1;
-    ctx.stroke();
-
-    ctx.fillStyle = t.accent;
-    ctx.font = `700 22px ${SANS}`;
-    ctx.fillText("PRIORITY", x + 40, y + 58);
-
-    ctx.fillStyle = t.text;
-    const text = mainGoal.trim() || "写下本周唯一关键目标。";
-    const size = text.length > 38 ? 44 : 50;
-    ctx.font = `520 ${size}px ${SERIF}`;
-    wrapText(ctx, text, x + 40, y + 136, w - 80, size * 1.42, 4);
-
-    ctx.strokeStyle = t.line;
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(x + 40, y + h - 56);
-    ctx.lineTo(x + w - 40, y + h - 56);
-    ctx.stroke();
-    ctx.fillStyle = t.dim;
-    ctx.font = `500 21px ${SANS}`;
-    ctx.fillText("ONE THING THAT MOVES THE WEEK", x + 40, y + h - 22);
-    ctx.restore();
-    return y + h;
-  }
-
-  function drawGoals(ctx, t, goals, startY = 1450) {
-    const x = 86, y = startY, w = W - 172;
-    const list = goals.map(s => s.trim()).filter(Boolean).slice(0, 3);
-    ctx.save();
-    ctx.fillStyle = t.sub;
-    ctx.font = `600 22px ${SANS}`;
-    ctx.fillText("SUPPORTING MOVES", x, y);
-    ctx.strokeStyle = t.line;
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(x + 250, y - 8);
-    ctx.lineTo(x + w, y - 8);
-    ctx.stroke();
-
-    let cy = y + 64;
-    if (!list.length) list.push("写下 2—3 个辅助目标。");
-    list.forEach((g, i) => {
-      const num = String(i + 1).padStart(2, "0");
-      ctx.fillStyle = t.accent;
-      ctx.globalAlpha = .76;
-      ctx.font = `700 34px ${SANS}`;
-      ctx.fillText(num, x, cy);
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = t.text;
-      ctx.font = `430 33px ${SERIF}`;
-      const r = wrapText(ctx, g, x + 76, cy, w - 76, 44, 2);
-      cy = r.y + 56;
+    sup.forEach(g => {
+      ctx.fillStyle = t.accent; ctx.globalAlpha = .85;
+      ctx.fillRect(MX, sy - 16, 30, 3);
+      ctx.globalAlpha = 1; ctx.fillStyle = t.sub;
+      ctx.font = `400 40px ${SERIF}`;
+      const r = wrapText(ctx, g, MX + 62, sy, CW - 62, 56, 2);
+      sy = r.yEnd + 80;
     });
     ctx.restore();
-    return cy;
-  }
 
-  function drawHabitsAndMotto(ctx, t, habits, motto, contentEndY) {
-    const filtered = habits.map(s => s.trim()).filter(Boolean).slice(0, 5);
-    const habitText = filtered.length ? filtered.join(" · ") : "长期修炼";
-    const m = motto.trim();
-    ctx.save();
-
-    const boxX = 86;
-    const boxW = W - 172;
-    const boxH = 126;
-    const minY = 1828;
-    const maxY = 1938;
-    const boxY = Math.max(minY, Math.min(maxY, (contentEndY || 1828) + 18));
-
-    roundedRect(ctx, boxX, boxY, boxW, boxH, 26);
-    ctx.fillStyle = t.id === "paper" ? "rgba(255,255,255,.24)" : "rgba(255,255,255,.042)";
-    ctx.fill();
-    ctx.strokeStyle = t.id === "paper" ? "rgba(0,0,0,.08)" : "rgba(255,255,255,.08)";
-    ctx.stroke();
-
-    ctx.fillStyle = t.accent;
-    ctx.font = `700 20px ${SANS}`;
-    ctx.fillText("PRACTICE", boxX + 28, boxY + 42);
-
-    ctx.fillStyle = t.sub;
-    ctx.font = `390 28px ${SERIF}`;
-    wrapText(ctx, habitText, boxX + 28, boxY + 84, boxW - 56, 36, 2);
-
+    // 寄语（提至中下部，随内容自适应）
+    const m = (st.motto || "").trim();
     if (m) {
-      ctx.textAlign = "right";
-      ctx.fillStyle = t.dim;
-      ctx.font = `380 25px ${SERIF}`;
-      ctx.fillText(m, W - 86, boxY + boxH + 42);
+      const dashY = Math.min(2230, Math.max(1880, sy + 70));
+      ctx.save();
+      ctx.fillStyle = t.accent; ctx.globalAlpha = .8;
+      ctx.fillRect(MX, dashY, 30, 3);
+      ctx.globalAlpha = 1; ctx.fillStyle = t.dim;
+      ctx.font = `300 36px ${SERIF}`;
+      wrapText(ctx, m, MX, dashY + 78, CW, 50, 2);
+      ctx.restore();
     }
-    ctx.restore();
   }
 
-  function drawSafeBottom(ctx, t) {
-    ctx.save();
-    ctx.textAlign = "left";
-    ctx.fillStyle = t.ghost;
-    ctx.font = `700 118px ${SANS}`;
-    ctx.fillText("PLAN", 82, H - 120);
-    ctx.restore();
+  function paint(ctx, st, grain) {
+    drawBg(ctx, THEMES[st.themeIndex], grain);
+    drawForeground(ctx, THEMES[st.themeIndex], st);
   }
 
+  // ---------- render ----------
   function generate() {
     const ctx = els.canvas.getContext("2d");
+    els.canvas.width = W; els.canvas.height = H;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    paint(ctx, state, true);
+    paintThumbs();
+    els.previewMeta.textContent = `${weekLabel()} · 1170 × 2532 PNG`;
+  }
+
+  function paintThumbs() {
+    thumbCanvases.forEach((cv, i) => {
+      const ctx = cv.getContext("2d");
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, cv.width, cv.height);
+      ctx.scale(cv.width / W, cv.height / H);
+      paint(ctx, { ...state, themeIndex: i }, false);
+    });
+  }
+
+  function renderThemes() {
+    els.themeGrid.innerHTML = "";
+    thumbCanvases.length = 0;
+    THEMES.forEach((t, i) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = `themeBtn${i === state.themeIndex ? " active" : ""}`;
+      const cv = document.createElement("canvas");
+      cv.width = 220; cv.height = 476;
+      const name = document.createElement("span");
+      name.className = "tname"; name.textContent = t.name;
+      btn.append(cv, name);
+      btn.addEventListener("click", () => {
+        state.themeIndex = i; saveState();
+        setStudioAccent(); renderThemes(); generate();
+      });
+      els.themeGrid.appendChild(btn);
+      thumbCanvases.push(cv);
+    });
+  }
+
+  function renderGoals() {
+    els.goalList.innerHTML = "";
+    state.goals.forEach((item, index) => {
+      const row = document.createElement("div");
+      row.className = "row";
+      const input = document.createElement("input");
+      input.value = item; input.maxLength = 26;
+      input.placeholder = `辅助目标 ${index + 1}`;
+      input.addEventListener("input", () => { state.goals[index] = input.value; saveState(); generate(); });
+      const remove = document.createElement("button");
+      remove.type = "button"; remove.className = "removeBtn";
+      remove.textContent = "×"; remove.setAttribute("aria-label", "删除");
+      remove.addEventListener("click", () => {
+        state.goals.splice(index, 1);
+        if (!state.goals.length) state.goals.push("");
+        saveState(); renderGoals(); generate();
+      });
+      row.append(input, remove);
+      els.goalList.appendChild(row);
+    });
+    document.getElementById("addGoal").disabled = state.goals.length >= 3;
+  }
+
+  function setStudioAccent() {
     const t = THEMES[state.themeIndex];
-    els.canvas.width = W;
-    els.canvas.height = H;
+    document.documentElement.style.setProperty("--accent", t.accent);
+    const c = t.accent.replace("#", "");
+    const r = parseInt(c.slice(0, 2), 16), g = parseInt(c.slice(2, 4), 16), b = parseInt(c.slice(4, 6), 16);
+    document.documentElement.style.setProperty("--accent-soft", `rgba(${r},${g},${b},.16)`);
+  }
 
-    drawBackground(ctx, t);
-    drawWeekMark(ctx, t);
-    drawSafeBottom(ctx, t);
-    drawTopMeta(ctx, t);
-    drawThemeLine(ctx, t, state.themeLine);
-    const cardBottom = drawMainCard(ctx, t, state.mainGoal);
-    const goalsBottom = drawGoals(ctx, t, state.goals, cardBottom + 88);
-    drawHabitsAndMotto(ctx, t, state.habits, state.motto, goalsBottom);
+  function bindFields() {
+    els.mainGoal.value = state.mainGoal;
+    els.motto.value = state.motto;
+    els.showWeek.checked = state.showWeek;
 
-    els.previewMeta.textContent = `${weekLabel()} · ${getWeekRange()} · 1170 × 2532 PNG`;
+    els.mainGoal.addEventListener("input", () => { state.mainGoal = els.mainGoal.value; saveState(); generate(); });
+    els.motto.addEventListener("input", () => { state.motto = els.motto.value; saveState(); generate(); });
+    els.showWeek.addEventListener("change", () => { state.showWeek = els.showWeek.checked; saveState(); generate(); });
+
+    document.getElementById("addGoal").addEventListener("click", () => {
+      if (state.goals.length < 3) state.goals.push("");
+      saveState(); renderGoals(); generate();
+    });
+    els.generateBtn.addEventListener("click", generate);
+    els.resetBtn.addEventListener("click", () => {
+      Object.assign(state, cloneDefaults());
+      saveState(); renderAll(); generate();
+    });
+    els.randomBtn.addEventListener("click", () => {
+      let next = Math.floor(Math.random() * THEMES.length);
+      if (next === state.themeIndex) next = (next + 1) % THEMES.length;
+      state.themeIndex = next; saveState();
+      setStudioAccent(); renderThemes(); generate();
+    });
+    els.downloadBtn.addEventListener("click", download);
+  }
+
+  function renderAll() {
+    setStudioAccent();
+    renderThemes();
+    renderGoals();
+    els.mainGoal.value = state.mainGoal;
+    els.motto.value = state.motto;
+    els.showWeek.checked = state.showWeek;
   }
 
   function download() {
@@ -992,9 +855,23 @@
 
   renderAll();
   bindFields();
-  // System fonts do not need network loading, but this keeps canvas rendering stable when custom local fonts are used.
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(generate);
-  else generate();
+
+  async function boot() {
+    if (document.fonts && document.fonts.load) {
+      try {
+        await Promise.all([
+          document.fonts.load('300 80px "Noto Serif SC"'),
+          document.fonts.load('400 80px "Noto Serif SC"'),
+          document.fonts.load('500 80px "Noto Serif SC"'),
+          document.fonts.load('600 40px "Noto Serif SC"')
+        ]);
+        await document.fonts.ready;
+      } catch (e) {}
+    }
+    generate();
+  }
+  generate();
+  boot();
 })();
 </script>
 </body>
