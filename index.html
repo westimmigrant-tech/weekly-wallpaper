@@ -717,10 +717,10 @@
     });
     ctx.restore();
 
-    // 寄语（提至中下部，随内容自适应）
+    // 寄语（上提到中下部，随内容自适应）
     const m = (st.motto || "").trim();
     if (m) {
-      const dashY = Math.min(2230, Math.max(1880, sy + 70));
+      const dashY = Math.min(2230, Math.max(1720, sy + 56));
       ctx.save();
       ctx.fillStyle = t.accent; ctx.globalAlpha = .8;
       ctx.fillRect(MX, dashY, 30, 3);
