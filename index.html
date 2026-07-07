@@ -302,7 +302,7 @@
   const MX = 110, CW = W - MX * 2;
   const SERIF = `"Noto Serif SC", "Songti SC", "Source Han Serif SC", "STSong", serif`;
 
-  // ---- 六个完整美学方向 ----
+  // ---- 十八个完整美学方向 ----
   const THEMES = [
     {
       id: "paper", name: "宣纸", motif: "paper", light: true,
@@ -363,6 +363,36 @@
       id: "aster", name: "紫苑", motif: "aster", light: true,
       bg: ["#dcd7e6", "#cfc7dd", "#bcb2cf"],
       text: "#322c3d", sub: "rgba(50,44,61,.62)", dim: "rgba(50,44,61,.42)", accent: "#6a5a8c"
+    },
+    {
+      id: "rain", name: "雨窗", motif: "rain", light: false,
+      bg: ["#121820", "#1e2832", "#33404a", "#1a222a"],
+      text: "#edf1f3", sub: "rgba(237,241,243,.68)", dim: "rgba(237,241,243,.42)", accent: "#9fb7c3"
+    },
+    {
+      id: "oldbook", name: "旧书", motif: "oldbook", light: true,
+      bg: ["#efe4cf", "#dfcfad", "#cab184"],
+      text: "#33271b", sub: "rgba(51,39,27,.62)", dim: "rgba(51,39,27,.42)", accent: "#8d5b35"
+    },
+    {
+      id: "moonwhite", name: "月白", motif: "moonwhite", light: true,
+      bg: ["#eff3f4", "#dfe8ed", "#cbd8df"],
+      text: "#26313a", sub: "rgba(38,49,58,.62)", dim: "rgba(38,49,58,.42)", accent: "#728b9a"
+    },
+    {
+      id: "mossstone", name: "苔石", motif: "mossstone", light: false,
+      bg: ["#121813", "#202a22", "#343d33", "#171d18"],
+      text: "#e8eee4", sub: "rgba(232,238,228,.68)", dim: "rgba(232,238,228,.42)", accent: "#a8b985"
+    },
+    {
+      id: "verdigris", name: "铜绿", motif: "verdigris", light: false,
+      bg: ["#081612", "#102923", "#1f4a40", "#0a1f1b"],
+      text: "#e7f0e8", sub: "rgba(231,240,232,.68)", dim: "rgba(231,240,232,.42)", accent: "#c9955f"
+    },
+    {
+      id: "snowafter", name: "雪后", motif: "snowafter", light: true,
+      bg: ["#f7f9f8", "#e8eef0", "#d4dde1"],
+      text: "#293236", sub: "rgba(41,50,54,.6)", dim: "rgba(41,50,54,.38)", accent: "#7894a2"
     }
   ];
 
@@ -666,6 +696,146 @@
         ctx.save(); ctx.translate(cx, cy); ctx.scale(1, ry / rx);
         ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, rx, 0, 7); ctx.fill();
         ctx.restore();
+      }
+      ctx.restore();
+    },
+    rain(ctx) {
+      ctx.save();
+      ctx.globalCompositeOperation = "screen";
+      const pane = ctx.createLinearGradient(0, 0, W, 0);
+      pane.addColorStop(0, "rgba(210,230,240,0)");
+      pane.addColorStop(.52, "rgba(210,230,240,.08)");
+      pane.addColorStop(1, "rgba(210,230,240,0)");
+      ctx.fillStyle = pane; ctx.fillRect(W * .18, 0, 2, H);
+      ctx.fillRect(W * .72, 0, 2, H);
+      const rng = mulberry32(91);
+      ctx.strokeStyle = "rgba(210,226,236,.28)";
+      ctx.lineWidth = 1.6;
+      for (let i = 0; i < 74; i++) {
+        const x = rng() * W, y = rng() * H, len = 80 + rng() * 220;
+        ctx.globalAlpha = .08 + rng() * .25;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + 14 + rng() * 18, y + len);
+        ctx.stroke();
+      }
+      const glow = ctx.createRadialGradient(W * .74, H * .2, 0, W * .74, H * .2, 620);
+      glow.addColorStop(0, "rgba(185,205,220,.18)");
+      glow.addColorStop(1, "rgba(185,205,220,0)");
+      ctx.globalAlpha = 1; ctx.fillStyle = glow; ctx.fillRect(0, 0, W, H);
+      ctx.restore();
+    },
+    oldbook(ctx) {
+      ctx.save();
+      ctx.globalCompositeOperation = "multiply";
+      const edge = ctx.createLinearGradient(0, 0, W, 0);
+      edge.addColorStop(0, "rgba(96,62,32,.18)");
+      edge.addColorStop(.18, "rgba(96,62,32,0)");
+      edge.addColorStop(.82, "rgba(96,62,32,0)");
+      edge.addColorStop(1, "rgba(96,62,32,.16)");
+      ctx.fillStyle = edge; ctx.fillRect(0, 0, W, H);
+      ctx.strokeStyle = "rgba(92,62,38,.09)";
+      ctx.lineWidth = 1;
+      for (let i = 0; i < 12; i++) {
+        const y = H * .12 + i * H * .064;
+        ctx.beginPath();
+        ctx.moveTo(MX, y);
+        ctx.bezierCurveTo(W * .34, y + 18, W * .66, y - 22, W - MX, y + 6);
+        ctx.stroke();
+      }
+      const rng = mulberry32(104);
+      ctx.fillStyle = "rgba(86,57,32,.09)";
+      for (let i = 0; i < 90; i++) {
+        ctx.globalAlpha = .2 + rng() * .55;
+        ctx.beginPath();
+        ctx.arc(rng() * W, rng() * H, .7 + rng() * 1.6, 0, 7);
+        ctx.fill();
+      }
+      ctx.restore();
+    },
+    moonwhite(ctx) {
+      ctx.save();
+      const moon = ctx.createRadialGradient(W * .76, H * .18, 0, W * .76, H * .18, 560);
+      moon.addColorStop(0, "rgba(255,255,250,.7)");
+      moon.addColorStop(.36, "rgba(235,244,248,.22)");
+      moon.addColorStop(1, "rgba(235,244,248,0)");
+      ctx.fillStyle = moon; ctx.fillRect(0, 0, W, H);
+      ctx.globalCompositeOperation = "multiply";
+      for (let i = 0; i < 4; i++) {
+        const y = H * (.34 + i * .11);
+        const mist = ctx.createLinearGradient(0, y - 70, 0, y + 70);
+        mist.addColorStop(0, "rgba(104,128,142,0)");
+        mist.addColorStop(.5, "rgba(104,128,142,.055)");
+        mist.addColorStop(1, "rgba(104,128,142,0)");
+        ctx.fillStyle = mist;
+        ctx.beginPath(); ctx.moveTo(0, y);
+        for (let x = 0; x <= W; x += 70) ctx.lineTo(x, y + Math.sin(x / 210 + i) * 22);
+        ctx.lineTo(W, y + 120); ctx.lineTo(0, y + 120); ctx.closePath(); ctx.fill();
+      }
+      ctx.restore();
+    },
+    mossstone(ctx) {
+      ctx.save();
+      ctx.globalCompositeOperation = "screen";
+      const rng = mulberry32(133);
+      for (let i = 0; i < 7; i++) {
+        const y = H * (.24 + i * .09);
+        ctx.strokeStyle = `rgba(178,197,140,${.035 + rng() * .05})`;
+        ctx.lineWidth = 2 + rng() * 3;
+        ctx.beginPath();
+        ctx.moveTo(-40, y);
+        for (let x = 0; x <= W + 40; x += 70) {
+          ctx.lineTo(x, y + Math.sin(x / 160 + i) * 28 + Math.cos(x / 95) * 10);
+        }
+        ctx.stroke();
+      }
+      ctx.globalCompositeOperation = "multiply";
+      const shade = ctx.createRadialGradient(W * .54, H * .78, 0, W * .54, H * .78, 920);
+      shade.addColorStop(0, "rgba(44,70,48,.08)");
+      shade.addColorStop(1, "rgba(8,12,9,.34)");
+      ctx.fillStyle = shade; ctx.fillRect(0, 0, W, H);
+      ctx.restore();
+    },
+    verdigris(ctx) {
+      ctx.save();
+      ctx.globalCompositeOperation = "screen";
+      for (let i = 0; i < 4; i++) {
+        const cx = W * (.2 + i * .2), cy = H * (.18 + i * .13), r = 360 + i * 70;
+        const bloom = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+        bloom.addColorStop(0, "rgba(78,154,132,.18)");
+        bloom.addColorStop(.45, "rgba(78,154,132,.06)");
+        bloom.addColorStop(1, "rgba(78,154,132,0)");
+        ctx.fillStyle = bloom; ctx.fillRect(0, 0, W, H);
+      }
+      const rng = mulberry32(155);
+      for (let i = 0; i < 46; i++) {
+        ctx.fillStyle = `rgba(215,156,94,${.035 + rng() * .09})`;
+        ctx.beginPath();
+        ctx.arc(rng() * W, H * (.25 + rng() * .62), .8 + rng() * 2.6, 0, 7);
+        ctx.fill();
+      }
+      ctx.restore();
+    },
+    snowafter(ctx) {
+      ctx.save();
+      const wash = ctx.createLinearGradient(0, H * .54, 0, H);
+      wash.addColorStop(0, "rgba(110,135,148,0)");
+      wash.addColorStop(.76, "rgba(110,135,148,.1)");
+      wash.addColorStop(1, "rgba(110,135,148,.18)");
+      ctx.fillStyle = wash; ctx.fillRect(0, 0, W, H);
+      ctx.globalCompositeOperation = "multiply";
+      ctx.fillStyle = "rgba(118,140,150,.09)";
+      ctx.beginPath(); ctx.moveTo(0, H * .84);
+      for (let x = 0; x <= W; x += 80) ctx.lineTo(x, H * .84 + Math.sin(x / 240) * 34 - Math.cos(x / 180) * 16);
+      ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath(); ctx.fill();
+      ctx.globalCompositeOperation = "screen";
+      const rng = mulberry32(188);
+      ctx.fillStyle = "rgba(255,255,255,.8)";
+      for (let i = 0; i < 56; i++) {
+        ctx.globalAlpha = .18 + rng() * .38;
+        ctx.beginPath();
+        ctx.arc(rng() * W, rng() * H * .74, .6 + rng() * 1.8, 0, 7);
+        ctx.fill();
       }
       ctx.restore();
     }
