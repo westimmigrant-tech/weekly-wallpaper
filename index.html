@@ -167,6 +167,33 @@
     border-top: 1px solid var(--line);
   }
   .toggleRow .lbl { font-family: var(--serif); font-size: 14px; letter-spacing: .1em; color: var(--muted); }
+  .rowCopy { display: grid; gap: 5px; }
+  .rowCopy .hint { color: var(--dim); font-size: 11px; letter-spacing: .04em; }
+  .segmented {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 14px;
+    background: rgba(0,0,0,.18);
+  }
+  .segmented button {
+    min-width: 48px;
+    height: 30px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--dim);
+    cursor: pointer;
+    font-size: 12px;
+    letter-spacing: .08em;
+    transition: background .18s ease, color .18s ease;
+  }
+  .segmented button:hover { color: var(--muted); background: rgba(255,255,255,.05); }
+  .segmented button.active {
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
   .switch { position: relative; width: 48px; height: 28px; cursor: pointer; flex: none; }
   .switch input { display: none; }
   .switch .track {
@@ -268,6 +295,18 @@
 
       <div class="secHead"><strong>寄语</strong><span>可选</span></div>
       <input id="motto" maxlength="24" placeholder="例如：不要等灵感，先坐下来。" />
+
+      <div class="toggleRow">
+        <span class="rowCopy">
+          <span class="lbl">目标周</span>
+          <span class="hint">自动：周五至周日显示下周</span>
+        </span>
+        <div class="segmented" id="targetWeek" role="group" aria-label="目标周">
+          <button type="button" data-week-mode="auto">自动</button>
+          <button type="button" data-week-mode="this">本周</button>
+          <button type="button" data-week-mode="next">下周</button>
+        </div>
+      </div>
 
       <div class="toggleRow">
         <span class="lbl">显示周数</span>
@@ -401,6 +440,7 @@
     mainGoal: "完成本周最重要的推进，不被琐事稀释注意力。",
     goals: ["整理一个可复用的工作流", "完成三次稳定运动", "留出两晚做深度阅读"],
     motto: "把注意力交给真正重要的事。",
+    targetWeek: "auto",
     showWeek: true
   };
 
@@ -410,6 +450,7 @@
     mainGoal: document.getElementById("mainGoal"),
     goalList: document.getElementById("goalList"),
     motto: document.getElementById("motto"),
+    targetWeek: document.getElementById("targetWeek"),
     showWeek: document.getElementById("showWeek"),
     canvas: document.getElementById("wallpaper"),
     generateBtn: document.getElementById("generateBtn"),
@@ -438,8 +479,16 @@
     const week = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
     return { year: isoYear, week };
   }
-  function weekLabel() {
-    const { year, week } = getISOInfo();
+  function getTargetISOInfo(mode = state.targetWeek, date = new Date()) {
+    const target = new Date(date);
+    const day = target.getDay();
+    if (mode === "next" || (mode === "auto" && (day === 5 || day === 6 || day === 0))) {
+      target.setDate(target.getDate() + 7);
+    }
+    return getISOInfo(target);
+  }
+  function weekLabel(st = state) {
+    const { year, week } = getTargetISOInfo(st.targetWeek);
     return `${year} · 第 ${week} 周`;
   }
 
@@ -862,7 +911,7 @@
     ctx.fillRect(MX, 956, 38, 3);
     ctx.globalAlpha = 1;
     setLS(ctx, 9);
-    const { week } = getISOInfo();
+    const { week } = getTargetISOInfo(st.targetWeek);
     ctx.fillStyle = t.sub; ctx.font = `500 28px ${SERIF}`;
     ctx.fillText(st.showWeek ? `第 ${week} 周` : "本 周", MX, 1010);
     setLS(ctx, 0);
@@ -913,7 +962,7 @@
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     paint(ctx, state, true);
     paintThumbs();
-    els.previewMeta.textContent = `${weekLabel()} · 1170 × 2532 PNG`;
+    els.previewMeta.textContent = `${weekLabel(state)} · 1170 × 2532 PNG`;
   }
 
   function paintThumbs() {
@@ -978,6 +1027,14 @@
     document.documentElement.style.setProperty("--accent-soft", `rgba(${r},${g},${b},.16)`);
   }
 
+  function renderWeekMode() {
+    els.targetWeek.querySelectorAll("button").forEach(btn => {
+      const active = btn.dataset.weekMode === state.targetWeek;
+      btn.classList.toggle("active", active);
+      btn.setAttribute("aria-pressed", String(active));
+    });
+  }
+
   function bindFields() {
     els.mainGoal.value = state.mainGoal;
     els.motto.value = state.motto;
@@ -985,6 +1042,12 @@
 
     els.mainGoal.addEventListener("input", () => { state.mainGoal = els.mainGoal.value; saveState(); generate(); });
     els.motto.addEventListener("input", () => { state.motto = els.motto.value; saveState(); generate(); });
+    els.targetWeek.addEventListener("click", (event) => {
+      const btn = event.target.closest("button[data-week-mode]");
+      if (!btn) return;
+      state.targetWeek = btn.dataset.weekMode;
+      saveState(); renderWeekMode(); generate();
+    });
     els.showWeek.addEventListener("change", () => { state.showWeek = els.showWeek.checked; saveState(); generate(); });
 
     document.getElementById("addGoal").addEventListener("click", () => {
@@ -1009,6 +1072,7 @@
     setStudioAccent();
     renderThemes();
     renderGoals();
+    renderWeekMode();
     els.mainGoal.value = state.mainGoal;
     els.motto.value = state.motto;
     els.showWeek.checked = state.showWeek;
@@ -1017,7 +1081,7 @@
   function download() {
     generate();
     const a = document.createElement("a");
-    const { year, week } = getISOInfo();
+    const { year, week } = getTargetISOInfo(state.targetWeek);
     a.download = `weekly-wallpaper-${year}-W${String(week).padStart(2, "0")}.png`;
     a.href = els.canvas.toDataURL("image/png");
     a.click();
